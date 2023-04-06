@@ -1,0 +1,88 @@
+.player {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls {
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  z-index: 0;
+  height: 100%;
+
+  & button {
+    height: 80%;
+    aspect-ratio: 1;
+    border-radius: 99em;
+    border: 2px solid #444;
+    background-color: var(--color-background-secondary);
+    color: #dde;
+    font-size: 1.3rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    cursor: pointer;
+
+    transition: color 100ms ease-in-out, background-color 100ms ease-in-out,
+      transform 300ms ease-in-out;
+
+    &.active {
+      color: var(--accent-color);
+    }
+    &.play {
+      position: relative;
+      height: 100%;
+      font-size: 2.5rem;
+
+      & div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 200ms ease-in-out;
+      }
+
+      &.active div {
+        transform: rotate(180deg);
+      }
+
+      &::after {
+        content: "";
+        display: block;
+        width: calc(100% + 6px);
+        height: calc(100% + 6px);
+        z-index: -1;
+        top: -3px;
+        left: -3px;
+        position: absolute;
+        border-radius: 99em;
+        background-image: conic-gradient(transparent, var(--accent-color));
+        opacity: 0;
+      }
+      &.active::after {
+        animation: spin 2s linear infinite;
+        opacity: 1;
+      }
+    }
+
+    &.active:hover {
+      color: var(--light-accent-color);
+    }
+
+    &:hover:not(.active) {
+      color: #fff;
+    }
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

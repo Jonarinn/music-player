@@ -1,0 +1,23 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  color: white;
+
+  --accent-color: #0e3;
+  --light-accent-color: #1f4;
+  --color-background: #222;
+  --color-background-secondary: #333;
+
+  background-color: var(--color-background);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.App.song {
+  transition: padding 300ms ease-in-out;
+  padding-bottom: 100px;
+}
