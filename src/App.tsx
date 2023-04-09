@@ -2,11 +2,18 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.scss";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Params,
+  LoaderFunctionArgs,
+} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Root from "./layouts/Root";
 import Artists from "./pages/Artists/Artists";
 import Artist from "./pages/Artists/Artist";
+import { getArtist } from "./data/functions";
+import { AsyncLoader } from "../types";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +30,20 @@ const router = createBrowserRouter([
       },
       {
         path: "artists",
-        element: <Artists />,
+
         children: [
           {
-            path: ":id",
+            index: true,
+            element: <Artists />,
+          },
+          {
+            path: ":artistId",
             element: <Artist />,
+            loader: async ({ params }: LoaderFunctionArgs) => {
+              const { artistId } = params;
+              if (!artistId) return console.log("no artistId");
+              return await getArtist(artistId);
+            },
           },
         ],
       },
@@ -36,8 +52,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return <RouterProvider router={router} />;
 }
 

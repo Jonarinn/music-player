@@ -6,25 +6,27 @@ import { RxTrackPrevious, RxTrackNext } from "react-icons/rx";
 
 interface ControlsProps {
   audioRef: React.RefObject<HTMLAudioElement>;
+  play: boolean;
+  setPlay: React.Dispatch<React.SetStateAction<boolean>>;
+  playButtonRef: React.RefObject<HTMLButtonElement>;
 }
 
-const Controls: React.FC<ControlsProps> = ({ audioRef }) => {
-  const [play, setPlay] = useState(false);
-
+const Controls: React.FC<ControlsProps> = ({
+  audioRef,
+  play,
+  setPlay,
+  playButtonRef,
+}) => {
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.currentTarget.classList.toggle("active");
-    if (!e.currentTarget.classList.contains("play")) return;
-    setTimeout(() => {
-      setPlay(!play);
-    }, 100);
+    setPlay(!play);
   };
 
   useEffect(() => {
     if (!audioRef.current) return;
     const audio = audioRef.current;
-    if (audio.paused) audio.play();
+    if (play && audio.paused) audio.play();
     else audio.pause();
-  }, [play]);
+  }, [play, audioRef]);
 
   return (
     <article className="controls">
@@ -34,7 +36,11 @@ const Controls: React.FC<ControlsProps> = ({ audioRef }) => {
       <button className="previous">
         <RxTrackPrevious />
       </button>
-      <button onClick={handleToggle} className="play btn-toggle">
+      <button
+        ref={playButtonRef}
+        onClick={handleToggle}
+        className={`play btn-toggle ${play ? "active" : ""}`}
+      >
         <div>{play ? <BsFillPauseFill /> : <BsPlay />}</div>
       </button>
       <button className="next">

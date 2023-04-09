@@ -1,0 +1,126 @@
+
+
+.artist {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    section {
+        margin-top:1rem;
+    }
+
+    
+    & section:first-of-type {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        object-fit: contain;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+
+        & .artist__banner__overlay {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            margin-right: 25px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 0.5rem;
+
+
+            & h1 {
+                font-size: 5rem;
+            }
+
+            & h2 {
+                font-weight: 400;
+            }
+        }
+    }
+
+    & .query__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        
+        
+        & .query__btn {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid white;
+            border-radius: 0.5rem;
+            background-color: var(--color-background-secondary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            align-items: center;
+            margin-top: 0.25rem;
+            font-size: 1.4rem;
+
+            & svg {
+                font-size: 1.2rem;
+
+            }
+
+            &:hover svg {
+                transform: translateX(-0.5rem);
+                transition: 140ms;
+
+                
+            }
+        }
+    }
+
+    .top__songs__container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;        
+        min-height: 30vh;
+        padding-top: 0.5rem;
+        .top__songs__list__item {
+            display: flex; 
+            padding: 0.5rem;
+            height: 75px;
+            width: 100%;
+            position: relative;
+            background-color: transparent;
+            color: white;
+            border: none;
+
+            &:hover {
+                background-color: var(--color-background-secondary);
+                cursor: pointer;
+            }
+
+
+            .number {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem;
+                aspect-ratio: 1;
+            }
+
+            .main__info {
+                flex: 3;
+                display: flex;
+                div {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: start;
+                    margin-left: 0.25rem;
+                }
+            }
+        }
+    }
+}
