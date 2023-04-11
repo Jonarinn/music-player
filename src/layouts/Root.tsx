@@ -4,17 +4,20 @@ import { Outlet } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
 import { getSearch } from "../data/functions";
+import { SearchTracks, Track } from "../../types";
+import Sidebar from "../components/sidebar/Sidebar";
 
 const Root = () => {
   const [song, setSong] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<boolean>(true);
+  const [queue, setQueue] = useState<Track[]>([]);
+  const [queueIndex, setQueueIndex] = useState<number>(0);
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const playButtonRef = React.useRef<HTMLButtonElement>(null);
   const [play, setPlay] = useState(false);
 
-  useEffect(() => {
-    // getSearch("21 savage").then((res) => console.log(res));
-  }, []);
+  const searchRef = React.useRef<HTMLInputElement>(null);
+  const [search, setSearch] = React.useState<SearchTracks>({} as SearchTracks);
 
   useEffect(() => {
     if (expanded) {
@@ -26,7 +29,8 @@ const Root = () => {
 
   return (
     <div className={`App ${song ? "song" : ""} `}>
-      <Header />
+      <Header searchRef={searchRef} setSearch={setSearch} />
+      <Sidebar expanded={expanded} setExpanded={setExpanded} />
       <main>
         <Outlet
           context={{
@@ -36,6 +40,12 @@ const Root = () => {
             setPlay: setPlay,
             audioRef: audioRef,
             playButtonRef: playButtonRef,
+            queue: queue,
+            setQueue: setQueue,
+            queueIndex: queueIndex,
+            setQueueIndex: setQueueIndex,
+            search: search,
+            searchRef: searchRef,
           }}
         />
       </main>
@@ -46,6 +56,9 @@ const Root = () => {
           play={play}
           setPlay={setPlay}
           playButtonRef={playButtonRef}
+          queue={queue}
+          queueIndex={queueIndex}
+          setQueueIndex={setQueueIndex}
         />
       )}
       <Footer />

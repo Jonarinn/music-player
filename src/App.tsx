@@ -12,8 +12,10 @@ import Home from "./pages/Home/Home";
 import Root from "./layouts/Root";
 import Artists from "./pages/Artists/Artists";
 import Artist from "./pages/Artists/Artist";
-import { getArtist } from "./data/functions";
-import { AsyncLoader } from "../types";
+import { getAlbum, getArtist } from "./data/functions";
+import Search from "./pages/Search/Search";
+import Album from "./pages/Album/Album";
+import AlbumRoot from "./layouts/AlbumRoot";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +27,23 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "about",
-        element: <h1>About</h1>,
+        path: "search",
+        element: <Search />,
+      },
+      {
+        path: "album",
+        element: <AlbumRoot />,
+        children: [
+          {
+            path: ":albumId",
+            element: <Album />,
+            loader: async ({ params }: LoaderFunctionArgs) => {
+              const { albumId } = params;
+              if (!albumId) return console.log("no albumId");
+              return await getAlbum(albumId);
+            },
+          },
+        ],
       },
       {
         path: "artists",
@@ -46,6 +63,10 @@ const router = createBrowserRouter([
             },
           },
         ],
+      },
+      {
+        path: "library",
+        element: <div>Library</div>,
       },
     ],
   },

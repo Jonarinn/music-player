@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ArtistType } from "../../types";
+import { ArtistType, Track } from "../../types";
 
-export const getSearch = async (query: string) => {
+export const getSearch = async (query: string): Promise<Track[]> => {
   const params = {
     q: query,
   };
@@ -41,5 +41,27 @@ export const getArtist = async (artistId: string): Promise<ArtistType> => {
     },
   };
   const response = await axios.request(options);
+
   return response.data;
-}
+};
+
+export const secondsToMinutesAndSeconds = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const secondsLeft = Math.floor(seconds % 60);
+  return `${minutes}:${
+    secondsLeft.toString().length === 1 ? "0" + secondsLeft : secondsLeft
+  }`;
+};
+
+export const getAlbum = async (albumId: string) => {
+  const options = {
+    mathod: "GET",
+    url: `https://deezerdevs-deezer.p.rapidapi.com/album/${albumId}`,
+    headers: {
+      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
+      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+    },
+  };
+  const response = await axios.request(options);
+  return response.data;
+};

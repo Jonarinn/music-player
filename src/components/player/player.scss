@@ -7,78 +7,172 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 1rem;
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
+  background: rgba(34, 40, 34, 0.22);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+  article:not(:nth-child(2)) {
+    flex: 1;
+  }
+
+  article:first-of-type {
+    display: flex;
+    gap: 0.5rem;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    h3:hover {
+      text-decoration: underline 2px;
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #ccc;
+      transition: 150ms;
+      &:hover {
+        text-decoration: underline 1px;
+        color: inherit;
+      }
+    }
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
+  }
+
+  article:last-of-type {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
 }
 
 .controls {
-  display: inline-flex;
+  display: flex;
+  flex: 0;
+  flex-direction: column;
+  width: fit-content;
   gap: 0.5rem;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0.5rem;
   z-index: 0;
   height: 100%;
 
-  & button {
-    height: 80%;
-    aspect-ratio: 1;
-    border-radius: 99em;
-    border: 2px solid #444;
-    background-color: var(--color-background-secondary);
-    color: #dde;
-    font-size: 1.3rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    place-items: center;
-    cursor: pointer;
+  .progress__container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex: 1;
+    gap: 0.5rem;
 
-    transition: color 100ms ease-in-out, background-color 100ms ease-in-out,
-      transform 300ms ease-in-out;
+    .progress__bar {
+      flex: 1;
+      height: 0.5rem;
+      display: flex;
+      align-items: center;
+      background-color: var(--color-background-secondary);
+      border-radius: 99em;
 
-    &.active {
-      color: var(--accent-color);
-    }
-    &.play {
-      position: relative;
-      height: 100%;
-      font-size: 2.5rem;
-
-      & div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 200ms ease-in-out;
-      }
-
-      &.active div {
-        transform: rotate(180deg);
-      }
-
-      &::after {
-        content: "";
-        display: block;
-        width: calc(100% + 6px);
-        height: calc(100% + 6px);
-        z-index: -1;
-        top: -3px;
-        left: -3px;
-        position: absolute;
+      .progress__bar__fill {
+        height: 100%;
+        background-color: var(--accent-color);
         border-radius: 99em;
-        background-image: conic-gradient(transparent, var(--accent-color));
-        opacity: 0;
-      }
-      &.active::after {
-        animation: spin 2s linear infinite;
-        opacity: 1;
       }
     }
+  }
 
-    &.active:hover {
-      color: var(--light-accent-color);
-    }
+  .main__controls {
+    display: flex;
+    gap: 0.5rem;
+    flex: 7;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
 
-    &:hover:not(.active) {
-      color: #fff;
+    & button {
+      width: 50px;
+      aspect-ratio: 1;
+      border-radius: 99em;
+      border: 2px solid #444;
+      background-color: var(--color-background-secondary);
+      color: #dde;
+      font-size: 1.3rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      place-items: center;
+      cursor: pointer;
+
+      transition: color 100ms ease-in-out, background-color 100ms ease-in-out,
+        transform 300ms ease-in-out;
+
+      &.active {
+        color: var(--accent-color);
+      }
+      &.play {
+        position: relative;
+        width: 60px;
+        font-size: 2.5rem;
+
+        & div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: transform 200ms ease-in-out;
+        }
+
+        &.active div {
+          transform: rotate(180deg);
+        }
+
+        &::after {
+          content: "";
+          display: block;
+          width: calc(100% + 6px);
+          height: calc(100% + 6px);
+          z-index: -1;
+          top: -3px;
+          left: -3px;
+          position: absolute;
+          border-radius: 99em;
+          background-image: conic-gradient(transparent, var(--accent-color));
+          opacity: 0;
+        }
+        &.active::after {
+          animation: spin 2s linear infinite;
+          opacity: 1;
+        }
+      }
+
+      &.active:hover {
+        color: var(--light-accent-color);
+      }
+
+      &:hover:not(.active) {
+        color: #fff;
+      }
     }
+  }
+}
+.volume {
+  display: flex;
+  align-items: center;
+  .volume__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
   }
 }
 

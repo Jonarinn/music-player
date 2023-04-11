@@ -18,6 +18,22 @@
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  &:visited {
+    color: inherit;
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+.hidden {
+  display: none;
+}
+
 .App.song {
   transition: padding 300ms ease-in-out;
   padding-bottom: 100px;
