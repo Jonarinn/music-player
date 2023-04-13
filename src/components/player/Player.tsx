@@ -37,15 +37,18 @@ const Player: React.FC<PlayerProps> = ({
   }, [queue, queueIndex, audioRef]);
 
   const handleEnded = () => {
+    if (queueIndex === queue.length - 1) return;
     setQueueIndex(queueIndex + 1);
   };
 
   const handleNext = () => {
+    if (queueIndex === queue.length - 1) return;
     setQueueIndex(queueIndex + 1);
     console.log(queueIndex);
   };
 
   const handlePrev = () => {
+    if (queueIndex === 0) return;
     setQueueIndex(queueIndex - 1);
     console.log(queueIndex);
   };
@@ -57,13 +60,19 @@ const Player: React.FC<PlayerProps> = ({
 
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "MediaPlayPause") {
-        e.preventDefault();
-        playButtonRef.current?.click();
-      } else if (e.key === "MediaTrackNext") {
-        handleNext();
-      } else if (e.key === "MediaTrackPrevious") {
-        handlePrev();
+      switch (e.key) {
+        case "mediaPlayPause":
+          e.preventDefault();
+          playButtonRef.current?.click();
+          break;
+        case "mediaTrackNext":
+          handleNext();
+          break;
+        case "mediaTrackPrevious":
+          handlePrev();
+          break;
+        default:
+          console.log(e.key);
       }
     },
     [playButtonRef, handleNext, handlePrev]

@@ -33,10 +33,12 @@ export type Track = {
   title_version: string;
   type: string;
   artist: ArtistType;
-  album: Album;
+  album: AlbumType;
 };
 
-export type Album = {
+export type AlbumType = {
+  artist: ArtistType;
+  contributors: Contributors[];
   id: number;
   title: string;
   cover: string;
@@ -47,7 +49,37 @@ export type Album = {
   md5_image: string;
   tracklist: string;
   type: string;
+  available: boolean;
+  explicit_lyrics: boolean;
+  explicit_content_lyrics: number;
+  explicit_content_cover: number;
+  release_date: string;
+  record_type: string;
+  tracks: {
+    data: Track[];
+  };
+  upc: string;
+  link: string;
+  share: string;
+  duration: number;
+  fans: number;
+  nb_tracks: number;
+  genre_id: number;
+  genres: Genres;
+  label: string;
 };
+
+export type Genres = {
+  data: Genre[];
+};
+
+export type Genre = {
+  id: number;
+  name: string;
+  picture: string;
+  type: string;
+};
+
 
 export interface OutletContextType {
   song: number;
@@ -67,4 +99,21 @@ export interface OutletContextType {
 export interface SearchTracks {
   search: string;
   tracks: Track[];
+}
+
+
+export interface Contributors {
+  name: string;
+  id: number;
+  link: string;
+  share: string;
+  picture: string;
+  picture_small: string;
+  picture_medium: string;
+  picture_big: string;
+  picture_xl: string;
+  radio: boolean;
+  tracklist: string;
+  type: string;
+
 }

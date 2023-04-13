@@ -15,7 +15,8 @@ import Artist from "./pages/Artists/Artist";
 import { getAlbum, getArtist } from "./data/functions";
 import Search from "./pages/Search/Search";
 import Album from "./pages/Album/Album";
-import AlbumRoot from "./layouts/AlbumRoot";
+import Login from "./pages/auth/login/Login";
+import Register from "./pages/auth/register/Register";
 
 const router = createBrowserRouter([
   {
@@ -31,8 +32,15 @@ const router = createBrowserRouter([
         element: <Search />,
       },
       {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
         path: "album",
-        element: <AlbumRoot />,
         children: [
           {
             path: ":albumId",

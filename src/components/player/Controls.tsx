@@ -38,6 +38,23 @@ const Controls: React.FC<ControlsProps> = ({
       e.currentTarget.classList.toggle("active");
     }
   };
+
+  const [progress, setProgress] = useState<number | string>(0);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!audioRef.current || !e.target.value) return;
+    const audio = audioRef.current;
+    const { value } = e.target;
+    audio.currentTime = (parseFloat(value) / 1000) * duration;
+    if (typeof parseFloat(value) !== "number") return;
+    setProgress(value);
+  };
+
+  useEffect(() => {
+    if (!duration) return;
+    setProgress((elapsed / duration) * 1000);
+  }, [elapsed, duration]);
+
   useEffect(() => {
     if (!audioRef.current) return;
     const audio = audioRef.current;
@@ -70,18 +87,15 @@ const Controls: React.FC<ControlsProps> = ({
       </div>
 
       <div className="progress__container">
-        {duration && (
-          <>
-            <p>{secondsToMinutesAndSeconds(elapsed)}</p>
-            <div className="progress__bar">
-              <div
-                className="progress__bar__fill"
-                style={{ width: (elapsed / duration) * 100 + "%" }}
-              ></div>
-            </div>
-            <p>{secondsToMinutesAndSeconds(duration)}</p>
-          </>
-        )}
+        <p>{secondsToMinutesAndSeconds(elapsed)}</p>
+        <input
+          min={0}
+          max={1000}
+          type={"range"}
+          value={progress}
+          onChange={handleChange}
+        />
+        <p>{secondsToMinutesAndSeconds(duration)}</p>
       </div>
     </article>
   );

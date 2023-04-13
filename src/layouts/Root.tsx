@@ -6,6 +6,8 @@ import Player from "../components/player/Player";
 import { getSearch } from "../data/functions";
 import { SearchTracks, Track } from "../../types";
 import Sidebar from "../components/sidebar/Sidebar";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "../../firebase.config";
 
 const Root = () => {
   const [song, setSong] = useState<string | null>(null);
@@ -15,6 +17,7 @@ const Root = () => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const playButtonRef = React.useRef<HTMLButtonElement>(null);
   const [play, setPlay] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const searchRef = React.useRef<HTMLInputElement>(null);
   const [search, setSearch] = React.useState<SearchTracks>({} as SearchTracks);
@@ -27,9 +30,21 @@ const Root = () => {
     }
   }, [expanded]);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        console.log(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <div className={`App ${song ? "song" : ""} `}>
-      <Header searchRef={searchRef} setSearch={setSearch} />
+      <Header searchRef={searchRef} setSearch={setSearch} user={user} />
       <Sidebar expanded={expanded} setExpanded={setExpanded} />
       <main>
         <Outlet

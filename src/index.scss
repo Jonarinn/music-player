@@ -38,3 +38,21 @@ ul {
   transition: padding 300ms ease-in-out;
   padding-bottom: 100px;
 }
+
+.google-btn {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  background-color: var(--color-background-secondary);
+  color: white;
+  &:active,
+  &:focus {
+    outline: 1px solid var(--accent-color);
+  }
+
+}

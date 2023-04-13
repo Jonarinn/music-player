@@ -3,11 +3,14 @@ header {
   top: 0;
   padding: 0.5rem 0;
   z-index: 10;
+  display: flex;
+  justify-content: space-between;
   nav {
     display: flex;
     gap: 0.5rem;
     & > button {
-      background-color: rgba(var(--color-background-secondary), $alpha: 0.6);
+      background-color: var(--color-background-secondary);
+      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -15,6 +18,7 @@ header {
       color: white;
       font-size: 1rem;
       cursor: pointer;
+      height: 40px;
       padding: 0.5rem;
       border-radius: 0.5rem;
       &:hover {
@@ -44,6 +48,7 @@ header {
         padding: 0.5rem;
         border: none;
         border-radius: 0.5rem 0 0 0.5rem;
+        height: 40px;
         outline: none;
         font-size: 1rem;
         color: white;
@@ -53,5 +58,31 @@ header {
         }
       }
     }
+    & > ul {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      li {
+
+        &:last-of-type a {
+          background-color: white;
+          color: var(--color-background-secondary);
+        }
+
+        a {
+          border: 1px solid white;
+          padding: 0.5rem;
+          border-radius: 0.5rem;
+          transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out;
+          
+          &:hover {
+            background-color: var(--color-background-secondary);
+            border-color: var(--color-background-secondary);
+            color: white;
+          }
+        }
+      }
+    }
   }
+
 }
