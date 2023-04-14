@@ -8,7 +8,6 @@ import TrackThumb from "../../components/trackThumb/TrackThumb";
 
 const Artist = () => {
   const artist = useLoaderData() as ArtistType;
-  const bannerRef = React.useRef<HTMLDivElement>(null);
   const [trackAmmount, setTrackAmmount] = React.useState<number>(5);
   const [topTracks, setTopTracks] = React.useState<Track[]>([] as Track[]);
 
@@ -25,19 +24,27 @@ const Artist = () => {
   }: OutletContextType = useOutletContext();
 
   useEffect(() => {
-    if (!artist || !bannerRef.current) return;
-
-    bannerRef.current.style.backgroundImage = `url(${artist.picture_xl})`;
+    if (!artist.name) return;
     getSearch(artist.name).then((res) => {
+      console.log(res);
+
       setTopTracks(res);
     });
-  }, [artist, bannerRef]);
+  }, [artist.name]);
 
-  if (!artist || !topTracks) return <div>loading...</div>;
+  useEffect(() => {
+    console.log(artist);
+  }, [artist]);
+
+  useEffect(() => {
+    console.log(topTracks);
+  }, [topTracks]);
+
+  if (!artist || !artist.picture_xl || !topTracks) return <div>loading...</div>;
 
   return (
     <div className="artist">
-      <section ref={bannerRef}>
+      <section style={{ backgroundImage: `url(${artist.picture_xl})` }}>
         <div className="artist__banner__overlay">
           <div className="artist__banner__overlay__content">
             <h1>{artist.name}</h1>

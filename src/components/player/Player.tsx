@@ -72,7 +72,7 @@ const Player: React.FC<PlayerProps> = ({
           handlePrev();
           break;
         default:
-          console.log(e.key);
+          return;
       }
     },
     [playButtonRef, handleNext, handlePrev]

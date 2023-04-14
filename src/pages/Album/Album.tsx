@@ -10,7 +10,6 @@ const Album = () => {
 
   const {
     audioRef,
-
     queue,
     queueIndex,
     setPlay,
