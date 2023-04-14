@@ -6,14 +6,22 @@ import { getSearch } from "../../data/functions";
 import { SearchTracks, Track } from "../../../types";
 import { signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase.config";
+import { AiOutlineSearch } from "react-icons/ai";
+import { RxCross2 } from "react-icons/rx";
 
 interface HeaderProps {
-  searchRef: React.RefObject<HTMLInputElement>;
+  searchInput: string;
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   setSearch: React.Dispatch<React.SetStateAction<SearchTracks>>;
   user: User | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchRef, setSearch, user }) => {
+const Header: React.FC<HeaderProps> = ({
+  searchInput,
+  setSearch,
+  user,
+  setSearchInput,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleBack = () => {
@@ -24,9 +32,8 @@ const Header: React.FC<HeaderProps> = ({ searchRef, setSearch, user }) => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const search = searchRef.current?.value;
-    getSearch(searchRef.current?.value as string)
-      .then((res) => setSearch({ search: search as string, tracks: res }))
+    getSearch(searchInput)
+      .then((res) => setSearch({ search: searchInput as string, tracks: res }))
       .catch((err) => console.log(err));
   };
 
@@ -40,6 +47,10 @@ const Header: React.FC<HeaderProps> = ({ searchRef, setSearch, user }) => {
         console.log(err);
       });
     navigate("/login");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
   return (
@@ -56,8 +67,22 @@ const Header: React.FC<HeaderProps> = ({ searchRef, setSearch, user }) => {
           onSubmit={handleSubmit}
           className={`${location.pathname === "/search" ? "" : "hidden"}`}
         >
-          <input ref={searchRef} type="text" />
-          <button type="submit">Search</button>
+          <button type="submit">
+            <AiOutlineSearch />
+          </button>
+          <input
+            value={searchInput}
+            onChange={handleChange}
+            type="text"
+            placeholder="Search"
+          />
+          {searchInput ? (
+            <button onClick={() => setSearchInput("")}>
+              <RxCross2 />
+            </button>
+          ) : (
+            <></>
+          )}
         </form>
       </nav>
 

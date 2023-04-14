@@ -1,14 +1,22 @@
 .auth {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 1rem;
-    max-width: 800px;
+    
     article {
+        max-width: 500px;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 0.4rem;
         
     }
+
+    .auth-providers {
+        display: flex;
+    }
+
     form {
         display: flex;
         flex-direction: column;

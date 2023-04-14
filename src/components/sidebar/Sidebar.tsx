@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, setExpanded }) => {
       </div>
       <nav>
         <ul>
-          <li>
+          <li className={`active`}>
             <Link to="/">
               <BsHouse />
               {expanded && <h2>Home</h2>}

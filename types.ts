@@ -93,7 +93,8 @@ export interface OutletContextType {
   queueIndex: number;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
   search: SearchTracks;
-  searchRef: React.RefObject<HTMLInputElement>;
+  searchInput: string;
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface SearchTracks {

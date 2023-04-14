@@ -41,6 +41,7 @@ ul {
 
 .google-btn {
   padding: 1rem;
+  flex:1;
   border-radius: 0.5rem;
   border: none;
   font-size: 1.1rem;
@@ -50,8 +51,14 @@ ul {
   cursor: pointer;
   background-color: var(--color-background-secondary);
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    outline: 1px solid var(--accent-color);
+  }
   &:active,
   &:focus {
-    outline: 1px solid var(--accent-color);
+    outline: 2px solid var(--accent-color);
   }
 }

@@ -55,7 +55,7 @@ const Login = () => {
           <p>Or</p>
           <div></div>
         </section>
-        <section>
+        <section className="auth-providers">
           <button className="google-btn" onClick={handleGoogle}>
             <FcGoogle />
             Continue with Google

@@ -19,15 +19,13 @@ const Root = () => {
   const [play, setPlay] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const searchRef = React.useRef<HTMLInputElement>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = React.useState<SearchTracks>({} as SearchTracks);
 
   useEffect(() => {
-    if (expanded) {
+    if (expanded)
       document.documentElement.style.setProperty("--main-padding", "200px");
-    } else {
-      document.documentElement.style.setProperty("--main-padding", "50px");
-    }
+    else document.documentElement.style.setProperty("--main-padding", "50px");
   }, [expanded]);
 
   useEffect(() => {
@@ -44,7 +42,12 @@ const Root = () => {
 
   return (
     <div className={`App ${song ? "song" : ""} `}>
-      <Header searchRef={searchRef} setSearch={setSearch} user={user} />
+      <Header
+        searchInput={searchInput}
+        setSearch={setSearch}
+        user={user}
+        setSearchInput={setSearchInput}
+      />
       <Sidebar expanded={expanded} setExpanded={setExpanded} />
       <main>
         <Outlet
@@ -60,7 +63,7 @@ const Root = () => {
             queueIndex: queueIndex,
             setQueueIndex: setQueueIndex,
             search: search,
-            searchRef: searchRef,
+            searchInput: searchInput,
           }}
         />
       </main>
