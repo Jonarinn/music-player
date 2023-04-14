@@ -26,8 +26,6 @@ const Artist = () => {
   useEffect(() => {
     if (!artist.name) return;
     getSearch(artist.name).then((res) => {
-      console.log(res);
-
       setTopTracks(res);
     });
   }, [artist.name]);
@@ -35,11 +33,6 @@ const Artist = () => {
   useEffect(() => {
     console.log(artist);
   }, [artist]);
-
-  useEffect(() => {
-    console.log(topTracks);
-  }, [topTracks]);
-
   if (!artist || !artist.picture_xl || !topTracks) return <div>loading...</div>;
 
   return (

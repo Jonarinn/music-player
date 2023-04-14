@@ -1,9 +1,9 @@
 import React from "react";
 import "./sidebar.scss";
-import { Link } from "react-router-dom";
-import { BsHouse } from "react-icons/bs";
-import { AiOutlineSearch } from "react-icons/ai";
-import { IoLibraryOutline } from "react-icons/io5";
+import { Link, useLocation } from "react-router-dom";
+import { BsHouse, BsHouseFill } from "react-icons/bs";
+import { IoLibraryOutline, IoLibrarySharp } from "react-icons/io5";
+import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
 
 interface SidebarProps {
   expanded: boolean;
@@ -11,6 +11,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ expanded, setExpanded }) => {
+  const location = useLocation();
+  const path = location.pathname;
+
   return (
     <section className="sidebar">
       <div className="logo">
@@ -20,21 +23,21 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, setExpanded }) => {
       </div>
       <nav>
         <ul>
-          <li className={`active`}>
+          <li className={`${path === "/" ? "active" : ""}`}>
             <Link to="/">
-              <BsHouse />
+              {path === "/" ? <BsHouseFill /> : <BsHouse />}
               {expanded && <h2>Home</h2>}
             </Link>
           </li>
-          <li>
+          <li className={`${path === "/search" ? "active" : ""}`}>
             <Link to="/search">
-              <AiOutlineSearch />
+              {path === "/search" ? <RiSearch2Fill /> : <RiSearch2Line />}
               {expanded && <h2>Search</h2>}
             </Link>
           </li>
-          <li>
+          <li className={`${path === "/library" ? "active" : ""}`}>
             <Link to="/library">
-              <IoLibraryOutline />
+              {path === "/library" ? <IoLibrarySharp /> : <IoLibraryOutline />}
               {expanded && <h2>Library</h2>}
             </Link>
           </li>

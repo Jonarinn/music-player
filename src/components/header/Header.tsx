@@ -3,7 +3,7 @@ import "./header.scss";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getSearch } from "../../data/functions";
-import { SearchTracks, Track } from "../../../types";
+import { AlertType, SearchTracks, Track } from "../../../types";
 import { signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -14,6 +14,7 @@ interface HeaderProps {
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   setSearch: React.Dispatch<React.SetStateAction<SearchTracks>>;
   user: User | null;
+  setAlert: React.Dispatch<React.SetStateAction<AlertType | null>>;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -21,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({
   setSearch,
   user,
   setSearchInput,
+  setAlert,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -41,12 +43,21 @@ const Header: React.FC<HeaderProps> = ({
     if (!user) return;
     signOut(auth)
       .then(() => {
-        console.log("Signed out");
+        setAlert({
+          type: "Success",
+          message: "Signed out successfully",
+        });
+        navigate("/login");
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: Error) => {
+        setAlert({
+          type: "Error",
+          message: err.message,
+        });
       });
-    navigate("/login");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

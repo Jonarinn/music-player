@@ -1,0 +1,20 @@
+.alert {
+  position: fixed;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+
+  $error: rgb(180, 0, 0);
+  $success: rgb(0, 187, 0);
+  &.Error {
+    background-color: $error;
+  }
+  &.Success {
+    background-color: $success;
+  }
+}

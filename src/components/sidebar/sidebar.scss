@@ -11,13 +11,24 @@
     font-size: 2.3rem;
   }
 
-  nav a {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
-    svg {
-      font-size: 1.5rem;
+  nav {
+    .active {
+      color: white;
+      fill: white;
+    }
+
+    fill: #eee;
+    color: #eee;
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+
+      svg {
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+      }
     }
   }
 }

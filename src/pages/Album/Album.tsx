@@ -19,6 +19,7 @@ const Album = () => {
   }: OutletContextType = useOutletContext();
 
   useEffect(() => {
+    console.log(albumData);
     if (albumData) {
       setAlbum(albumData);
     }

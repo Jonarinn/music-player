@@ -7,10 +7,15 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../../../../firebase.config";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { OutletContextType } from "../../../../types";
 
 const Login = () => {
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  const { setAlert }: OutletContextType = useOutletContext();
 
   const handleLogIn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,22 +25,48 @@ const Login = () => {
       emailRef.current.value,
       passwordRef.current.value
     )
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        setAlert({
+          type: "Success",
+          message: "You have successfully logged in",
+        });
+        navigate("/");
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: Error) => {
+        setAlert({
+          type: "Error",
+          message: err.message,
+        });
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
       });
   };
 
   const handleGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        setAlert({
+          type: "Success",
+          message: "You have successfully logged in",
+        });
+        navigate("/");
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((err: Error) => {
+        setAlert({
+          type: "Error",
+          message: err.message,
+        });
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
       });
   };
 
@@ -44,7 +75,7 @@ const Login = () => {
       <h1>Login</h1>
       <article>
         <section>
-          <form>
+          <form onSubmit={handleLogIn}>
             <input type="text" placeholder="Email" />
             <input type="password" placeholder="Password" />
             <button type="submit">Login</button>

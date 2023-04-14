@@ -80,7 +80,6 @@ export type Genre = {
   type: string;
 };
 
-
 export interface OutletContextType {
   song: number;
   setSong: React.Dispatch<React.SetStateAction<string>>;
@@ -95,13 +94,13 @@ export interface OutletContextType {
   search: SearchTracks;
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+  setAlert: React.Dispatch<React.SetStateAction<AlertType | null>>;
 }
 
 export interface SearchTracks {
   search: string;
   tracks: Track[];
 }
-
 
 export interface Contributors {
   name: string;
@@ -116,5 +115,9 @@ export interface Contributors {
   radio: boolean;
   tracklist: string;
   type: string;
+}
 
+export interface AlertType {
+  type: string;
+  message: string;
 }

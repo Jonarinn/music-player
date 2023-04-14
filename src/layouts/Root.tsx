@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/header/Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
 import { getSearch } from "../data/functions";
-import { SearchTracks, Track } from "../../types";
+import { AlertType, SearchTracks, Track } from "../../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";
+import Alert from "../components/Alert/Alert";
 
 const Root = () => {
   const [song, setSong] = useState<string | null>(null);
@@ -18,7 +19,7 @@ const Root = () => {
   const playButtonRef = React.useRef<HTMLButtonElement>(null);
   const [play, setPlay] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
+  const [alert, setAlert] = useState<AlertType | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = React.useState<SearchTracks>({} as SearchTracks);
 
@@ -32,7 +33,6 @@ const Root = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        console.log(user);
       } else {
         setUser(null);
       }
@@ -42,11 +42,13 @@ const Root = () => {
 
   return (
     <div className={`App ${song ? "song" : ""} `}>
+      {alert && <Alert alert={alert} />}
       <Header
         searchInput={searchInput}
         setSearch={setSearch}
         user={user}
         setSearchInput={setSearchInput}
+        setAlert={setAlert}
       />
       <Sidebar expanded={expanded} setExpanded={setExpanded} />
       <main>
@@ -64,6 +66,7 @@ const Root = () => {
             setQueueIndex: setQueueIndex,
             search: search,
             searchInput: searchInput,
+            setAlert: setAlert,
           }}
         />
       </main>
