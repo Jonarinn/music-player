@@ -44,7 +44,6 @@ const Player: React.FC<PlayerProps> = ({
   const handleNext = () => {
     if (queueIndex === queue.length - 1) return;
     setQueueIndex(queueIndex + 1);
-    console.log(queueIndex);
   };
 
   const handlePrev = () => {
@@ -58,12 +57,21 @@ const Player: React.FC<PlayerProps> = ({
     setVolume(parseFloat(value));
   };
 
+  const handleToggle = () => {
+    if (!playButtonRef.current) return;
+    if (playButtonRef.current.classList.contains("play")) {
+      setPlay(!play);
+    } else {
+      playButtonRef.current.classList.toggle("active");
+    }
+  };
+
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
       switch (e.key) {
         case "mediaPlayPause":
           e.preventDefault();
-          playButtonRef.current?.click();
+          handleToggle();
           break;
         case "mediaTrackNext":
           handleNext();
@@ -75,7 +83,7 @@ const Player: React.FC<PlayerProps> = ({
           return;
       }
     },
-    [playButtonRef, handleNext, handlePrev]
+    [playButtonRef, handleNext, handlePrev, handleToggle, play, setPlay]
   );
 
   useEffect(() => {
@@ -106,6 +114,7 @@ const Player: React.FC<PlayerProps> = ({
         </div>
       </article>
       <Controls
+        handleToggle={handleToggle}
         audioRef={audioRef}
         play={play}
         setPlay={setPlay}

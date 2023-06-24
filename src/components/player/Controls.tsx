@@ -17,6 +17,7 @@ interface ControlsProps {
   queueIndex: number;
   duration: number;
   elapsed: number;
+  handleToggle: () => void;
 }
 
 const Controls: React.FC<ControlsProps> = ({
@@ -30,15 +31,8 @@ const Controls: React.FC<ControlsProps> = ({
   queueIndex,
   duration,
   elapsed,
+  handleToggle,
 }) => {
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (e.currentTarget.classList.contains("play")) {
-      setPlay(!play);
-    } else {
-      e.currentTarget.classList.toggle("active");
-    }
-  };
-
   const [progress, setProgress] = useState<number | string>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
