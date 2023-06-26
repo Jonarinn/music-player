@@ -1,9 +1,10 @@
 :root {
-  --accent-color: #0e3;
-  --light-accent-color: #1f4;
+  --accent-color: oklch(82.94% 0.185 205.41);
+  --light-accent-color: oklch(86.18% 0.153 205.41);
   --color-background: #222;
   --color-background-secondary: #333;
   --main-padding: 200px;
+  --top-songs-height: 375px;
 }
 
 * {
@@ -41,7 +42,7 @@ ul {
 
 .google-btn {
   padding: 1rem;
-  flex:1;
+  flex: 1;
   border-radius: 0.5rem;
   border: none;
   font-size: 1.1rem;

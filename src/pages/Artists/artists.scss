@@ -8,33 +8,65 @@
   width: 100%;
 
   section:not(:first-of-type) {
-    margin-top: 1rem;
+    margin-top: 20px;
   }
 
-  & section:first-of-type {
-    position: relative;
+  .artist__info {
+    display: flex;
     width: 100%;
-    height: 500px;
-    object-fit: contain;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    gap: 20px;
 
-    & .artist__banner__overlay {
-      position: absolute;
-      bottom: 25px;
-      left: 25px;
-      margin-right: 25px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 1rem;
-      border-radius: 0.5rem;
+    &__image > img {
+      height: 400px;
+      max-height: 50vh;
+    }
 
-      & h1 {
-        font-size: 5rem;
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+
+      .popularity {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .wrapper {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        &__bar {
+          background-color: var(--color-background-secondary);
+          height: 30px;
+          border-radius: 99em;
+          display: flex;
+          align-items: center;
+          flex: 1;
+
+          & > p {
+            position: relative;
+            top: 100%;
+            right: 10px;
+          }
+
+          &__progress {
+            transition: width 0.5s ease-in-out;
+            width: 0;
+            background-color: var(--accent-color);
+            height: 100%;
+            border-radius: 99em;
+          }
+        }
       }
 
-      & h2 {
-        font-weight: 400;
+      h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
       }
     }
   }
@@ -46,6 +78,12 @@
   width: 100%;
   min-height: 30vh;
   padding-top: 0.5rem;
+
+  .top__songs__list {
+    height: var(--top-songs-height);
+    transition: height 0.5s ease-in-out;
+    overflow: hidden;
+  }
 
   .top__songs__list__item {
     display: flex;
@@ -114,7 +152,29 @@
       }
     }
   }
+
+  .show__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+    background-color: var(--color-background-secondary);
+    color: var(--accent-color);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--accent-color);
+      color: var(--color-background-secondary);
+    }
+  }
 }
+
 @keyframes tunes {
   0% {
     transform: scaleY(0.2);

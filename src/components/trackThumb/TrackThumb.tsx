@@ -1,18 +1,19 @@
 import React from "react";
-import { Track } from "../../../types";
+import { ImageObject, TrackObject } from "../../../types";
 
 interface TrackThumbProps {
-  track: Track;
+  track: TrackObject;
   i: number;
-  queue: Track[];
+  queue: TrackObject[];
   queueIndex: number;
   num?: boolean;
-  setQueue: React.Dispatch<React.SetStateAction<Track[]>>;
+  setQueue: React.Dispatch<React.SetStateAction<TrackObject[]>>;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
   setSong: React.Dispatch<React.SetStateAction<string>>;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   audioRef: React.RefObject<HTMLAudioElement>;
-  tracks: Track[];
+  tracks: TrackObject[];
+  images: ImageObject[];
 }
 
 const TrackThumb: React.FC<TrackThumbProps> = ({
@@ -27,14 +28,21 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
   setQueueIndex,
   setSong,
   tracks,
+  images,
 }) => {
-  const handleSong = (e: React.MouseEvent<HTMLButtonElement>, track: Track) => {
+  const handleSong = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    track: TrackObject
+  ) => {
     setQueue(tracks.slice(tracks.indexOf(track), tracks.length));
     setQueueIndex(0);
-    setSong(track.preview);
+    console.log(track.preview_url);
+
+    setSong(track.preview_url);
     setPlay(true);
     audioRef.current?.load();
   };
+
   return (
     <button
       className={`top__songs__list__item ${
@@ -57,10 +65,10 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
       )}
 
       <div className="main__info">
-        <img src={track.album.cover_small} alt="Album Cover" />
+        <img src={images[2].url} alt="Album Cover" />
         <div>
-          <h3>{track.title}</h3>
-          <h4>{track.artist.name}</h4>
+          <h3>{track.name}</h3>
+          <h4>{track.artists[0].name}</h4>
         </div>
       </div>
     </button>

@@ -1,22 +1,22 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useContext, createContext, useState, useEffect } from "react";
 import "./App.scss";
 import {
   RouterProvider,
   createBrowserRouter,
-  Params,
   LoaderFunctionArgs,
+  RouteObject,
 } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Root from "./layouts/Root";
 import Artists from "./pages/Artists/Artists";
 import Artist from "./pages/Artists/Artist";
-import { getAlbum, getArtist } from "./data/functions";
+import { APIController } from "./data/functions";
 import Search from "./pages/Search/Search";
 import Album from "./pages/Album/Album";
 import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
+import { TokenContext } from "./context";
+import { loadAlbum, loadArtist } from "./loaderFunctions";
 
 const router = createBrowserRouter([
   {
@@ -45,11 +45,7 @@ const router = createBrowserRouter([
           {
             path: ":albumId",
             element: <Album />,
-            loader: async ({ params }: LoaderFunctionArgs) => {
-              const { albumId } = params;
-              if (!albumId) return console.log("no albumId");
-              return await getAlbum(albumId);
-            },
+            loader: loadAlbum,
           },
         ],
       },
@@ -64,11 +60,7 @@ const router = createBrowserRouter([
           {
             path: ":artistId",
             element: <Artist />,
-            loader: async ({ params }: LoaderFunctionArgs) => {
-              const { artistId } = params;
-              if (!artistId) return console.log("no artistId");
-              return await getArtist(artistId);
-            },
+            loader: loadArtist,
           },
         ],
       },
@@ -81,7 +73,26 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      const token = await APIController.getToken();
+      setAccessToken(token);
+    };
+
+    fetchAccessToken();
+  }, []);
+
+  useEffect(() => {
+    if (!accessToken) return;
+    APIController.setAccessToken(accessToken);
+  }, [accessToken]);
+  return (
+    <TokenContext.Provider value={accessToken}>
+      <RouterProvider router={router} />
+    </TokenContext.Provider>
+  );
 }
 
 export default App;

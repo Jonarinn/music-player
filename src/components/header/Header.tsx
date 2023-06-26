@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import "./header.scss";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { getSearch } from "../../data/functions";
-import { AlertType, SearchTracks, Track } from "../../../types";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AlertType, SearchTracks, TrackObject } from "../../../types";
 import { signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 import { AiOutlineSearch } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
+import { APIController } from "../../data/functions";
+import { TokenContext } from "../../context";
 
 interface HeaderProps {
   searchInput: string;
@@ -26,17 +27,25 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const accessToken = useContext(TokenContext);
+
   const handleBack = () => {
     navigate(-1);
   };
+
   const handleForward = () => {
     navigate(1);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    getSearch(searchInput)
-      .then((res) => setSearch({ search: searchInput as string, tracks: res }))
-      .catch((err) => console.log(err));
+    if (!searchInput || !accessToken) return;
+    APIController.getSearch(accessToken, searchInput, ["artist", "track"]).then(
+      (res: Omit<SearchTracks, "search">) => {
+        setSearch({ ...res, search: searchInput });
+      }
+    );
   };
 
   const handleSignOut = () => {

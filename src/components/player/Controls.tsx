@@ -3,7 +3,7 @@ import "./player.scss";
 import { BsPlay, BsRepeat, BsFillPauseFill } from "react-icons/bs";
 import { BiShuffle } from "react-icons/bi";
 import { RxTrackPrevious, RxTrackNext } from "react-icons/rx";
-import { Track } from "../../../types";
+import { TrackObject } from "../../../types";
 import { secondsToMinutesAndSeconds } from "../../data/functions";
 
 interface ControlsProps {
@@ -13,7 +13,7 @@ interface ControlsProps {
   playButtonRef: React.RefObject<HTMLButtonElement>;
   handleNext: () => void;
   handlePrev: () => void;
-  queue: Track[];
+  queue: TrackObject[];
   queueIndex: number;
   duration: number;
   elapsed: number;
