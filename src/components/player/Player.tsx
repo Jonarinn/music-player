@@ -1,23 +1,25 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { getSong } from "../../data/functions";
 import Controls from "./Controls";
-import { Track } from "../../../types";
+import { TrackObject } from "../../../types";
 import { Link } from "react-router-dom";
 import { FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi";
 
 interface PlayerProps {
   song: string;
+  setSong: React.Dispatch<React.SetStateAction<string | null>>;
   audioRef: React.RefObject<HTMLAudioElement>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   playButtonRef: React.RefObject<HTMLButtonElement>;
-  queue: Track[];
+  queue: TrackObject[];
   queueIndex: number;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Player: React.FC<PlayerProps> = ({
   song,
+  setSong,
   audioRef,
   play,
   setPlay,
@@ -33,7 +35,7 @@ const Player: React.FC<PlayerProps> = ({
 
   useEffect(() => {
     if (!queue) return;
-    audioRef.current?.setAttribute("src", queue[queueIndex].preview);
+    setSong(queue[queueIndex].preview_url);
   }, [queue, queueIndex, audioRef]);
 
   const handleEnded = () => {
@@ -98,19 +100,34 @@ const Player: React.FC<PlayerProps> = ({
     };
   }, [queueIndex, queue, handleKeydown]);
 
-  if (!queue) return null;
+  useEffect(() => {
+    console.log(queue);
+  }, [queue]);
+
+  useEffect(() => {
+    console.log(song);
+  }, [song]);
+
+  if (!queue || !queue[queueIndex]) return null;
 
   return (
     <section className="player">
       <article>
-        <img src={queue[queueIndex].album.cover_small} />
+        <img src={queue[queueIndex].album.images[2].url} />
         <div>
           <Link to={`/album/${queue[queueIndex].album.id}`}>
-            <h3>{queue[queueIndex].title}</h3>
+            <h3>{queue[queueIndex].name}</h3>
           </Link>
-          <Link to={`/artists/${queue[queueIndex].artist.id}`}>
-            <h4>{queue[queueIndex].artist.name}</h4>
-          </Link>
+          <div className="artists">
+            {queue[queueIndex].artists.map((artist, i) => (
+              <Link to={`/artists/${artist.id}`} key={i}>
+                <h4>
+                  {artist.name}
+                  {i === queue[queueIndex].artists.length - 1 ? "" : ","}
+                </h4>
+              </Link>
+            ))}
+          </div>
         </div>
       </article>
       <Controls
@@ -153,6 +170,7 @@ const Player: React.FC<PlayerProps> = ({
         onLoadedData={() => audioRef.current?.play()}
         ref={audioRef}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+        src={song}
       />
     </section>
   );

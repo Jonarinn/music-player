@@ -3,8 +3,8 @@ import Header from "../components/header/Header";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
-import { getSearch } from "../data/functions";
-import { AlertType, SearchTracks, Track } from "../../types";
+import { APIController, getSearch } from "../data/functions";
+import { AlertType, SearchTracks, TrackObject } from "../../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";
@@ -13,7 +13,7 @@ import Alert from "../components/Alert/Alert";
 const Root = () => {
   const [song, setSong] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<boolean>(true);
-  const [queue, setQueue] = useState<Track[]>([]);
+  const [queue, setQueue] = useState<TrackObject[]>([]);
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const playButtonRef = React.useRef<HTMLButtonElement>(null);
@@ -74,6 +74,7 @@ const Root = () => {
         <Player
           audioRef={audioRef}
           song={song}
+          setSong={setSong}
           play={play}
           setPlay={setPlay}
           playButtonRef={playButtonRef}

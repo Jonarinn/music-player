@@ -1,12 +1,25 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData, useOutletContext } from "react-router-dom";
-import { AlbumType, OutletContextType } from "../../../types";
+import {
+  AlbumObject,
+  AlbumTrackObject,
+  OutletContextType,
+  TrackObject,
+} from "../../../types";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import "./album.scss";
 
 const Album = () => {
-  const albumData = useLoaderData() as AlbumType;
-  const [album, setAlbum] = React.useState<AlbumType | null>(null);
+  const albumData = useLoaderData() as {
+    albumInfo: AlbumObject;
+    albumTracks: AlbumTrackObject[];
+  };
+  const [albumInfo, setAlbumInfo] = useState<AlbumObject | null>(
+    albumData.albumInfo
+  );
+  const [albumTracks, setAlbumTracks] = useState<AlbumTrackObject[]>(
+    albumData.albumTracks
+  );
 
   const {
     audioRef,
@@ -18,32 +31,23 @@ const Album = () => {
     setSong,
   }: OutletContextType = useOutletContext();
 
-  useEffect(() => {
-    console.log(albumData);
-    if (albumData) {
-      setAlbum(albumData);
-    }
-  }, [albumData]);
-
-  if (!album || !album.tracks) return <div>Loading...</div>;
+  if (!albumInfo || !albumTracks) return <div>Loading...</div>;
 
   return (
     <div className="album">
       <section className="cover">
-        <img src={album.cover_big} alt={"Album cover"} />
+        <img src={albumInfo.images[0].url} alt={"Album cover"} />
         <div>
-          <p>
-            {album.record_type[0].toUpperCase() + album.record_type.slice(1)}
-          </p>
-          <h1>{album.title}</h1>
-          <p>{Intl.NumberFormat().format(album.fans)} Fans</p>
+          <p>{albumInfo.type[0].toUpperCase() + albumInfo.type.slice(1)}</p>
+          <h1>{albumInfo.name}</h1>
+          <p>{Intl.NumberFormat().format(albumInfo.popularity)} Fans</p>
         </div>
       </section>
       <section className="top__songs__container">
         <h2>Songs</h2>
         <div className="top__songs__list">
-          {album.tracks &&
-            album.tracks.data.map((track, i) => {
+          {albumTracks &&
+            albumTracks.map((track, i) => {
               return (
                 <TrackThumb
                   audioRef={audioRef}
@@ -54,8 +58,9 @@ const Album = () => {
                   setQueue={setQueue}
                   setQueueIndex={setQueueIndex}
                   setSong={setSong}
+                  images={albumInfo.images}
                   track={track}
-                  tracks={album.tracks.data}
+                  tracks={albumTracks}
                   key={i}
                 />
               );
