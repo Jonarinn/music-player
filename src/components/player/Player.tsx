@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { getSong } from "../../data/functions";
 import Controls from "./Controls";
 import { TrackObject } from "../../../types";
 import { Link } from "react-router-dom";
@@ -82,7 +81,7 @@ const Player: React.FC<PlayerProps> = ({
           handlePrev();
           break;
         default:
-          return;
+          console.log(e.key);
       }
     },
     [playButtonRef, handleNext, handlePrev, handleToggle, play, setPlay]
@@ -99,14 +98,6 @@ const Player: React.FC<PlayerProps> = ({
       document.removeEventListener("keydown", handleKeydown);
     };
   }, [queueIndex, queue, handleKeydown]);
-
-  useEffect(() => {
-    console.log(queue);
-  }, [queue]);
-
-  useEffect(() => {
-    console.log(song);
-  }, [song]);
 
   if (!queue || !queue[queueIndex]) return null;
 

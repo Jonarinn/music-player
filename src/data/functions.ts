@@ -1,49 +1,4 @@
-import axios from "axios";
-import { ArtistObject, SearchType, TrackObject } from "../../types";
-
-export const getSearch = async (query: string): Promise<TrackObject[]> => {
-  const params = {
-    q: query,
-  };
-  const options = {
-    mathod: "GET",
-    url: "https://deezerdevs-deezer.p.rapidapi.com/search",
-    params: params,
-    headers: {
-      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-    },
-  };
-  const response = await axios.request(options);
-  return response.data.data;
-};
-
-export const getSong = async (songId: number) => {
-  const options = {
-    mathod: "GET",
-    url: `https://deezerdevs-deezer.p.rapidapi.com/track/${songId}`,
-    headers: {
-      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-    },
-  };
-  const response = await axios.request(options);
-  return response.data;
-};
-
-export const getArtist = async (artistId: string): Promise<ArtistObject> => {
-  const options = {
-    mathod: "GET",
-    url: `https://deezerdevs-deezer.p.rapidapi.com/artist/${artistId}`,
-    headers: {
-      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-    },
-  };
-  const response = await axios.request(options);
-
-  return response.data;
-};
+import { SearchType, TrackObject } from "../../types";
 
 export const secondsToMinutesAndSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -51,32 +6,6 @@ export const secondsToMinutesAndSeconds = (seconds: number) => {
   return `${minutes}:${
     secondsLeft.toString().length === 1 ? "0" + secondsLeft : secondsLeft
   }`;
-};
-
-export const getAlbum = async (albumId: string) => {
-  const options = {
-    mathod: "GET",
-    url: `https://deezerdevs-deezer.p.rapidapi.com/album/${albumId}`,
-    headers: {
-      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-    },
-  };
-  const response = await axios.request(options);
-  return response.data;
-};
-
-export const getGenre = async (genreId: string) => {
-  const options = {
-    mathod: "GET",
-    url: `https://deezerdevs-deezer.p.rapidapi.com/genre/${genreId}`,
-    headers: {
-      "X-RapidAPI-Key": "15cfc5d4d3mshb1145f9bcbaecb2p1d3e96jsn45109b2f6d80",
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-    },
-  };
-  const response = await axios.request(options);
-  return response.data;
 };
 
 export const APIController = (() => {
@@ -93,8 +22,13 @@ export const APIController = (() => {
       },
       body: "grant_type=client_credentials",
     });
-    const data = await result.json();
-    return data.access_token;
+    try {
+      const data = await result.json();
+      return data.access_token;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
 
   const _getGenres = async (token: string) => {
