@@ -118,9 +118,16 @@ const Player: React.FC<PlayerProps> = ({
           <Link to={`/album/${queue[queueIndex].album.id}`}>
             <h3>{queue[queueIndex].name}</h3>
           </Link>
-          <Link to={`/artists/${queue[queueIndex].artists[0].id}`}>
-            <h4>{queue[queueIndex].artists.map((e) => e.name)}</h4>
-          </Link>
+          <div className="artists">
+            {queue[queueIndex].artists.map((artist, i) => (
+              <Link to={`/artists/${artist.id}`} key={i}>
+                <h4>
+                  {artist.name}
+                  {i === queue[queueIndex].artists.length - 1 ? "" : ","}
+                </h4>
+              </Link>
+            ))}
+          </div>
         </div>
       </article>
       <Controls

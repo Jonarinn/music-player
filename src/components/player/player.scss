@@ -29,14 +29,18 @@
       text-decoration: underline 2px;
     }
 
-    h4 {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #ccc;
-      transition: 150ms;
-      &:hover {
-        text-decoration: underline 1px;
-        color: inherit;
+    & .artists {
+      display: flex;
+      gap: 0.2rem;
+      h4 {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #ccc;
+        transition: 150ms;
+        &:hover {
+          text-decoration: underline 1px;
+          color: inherit;
+        }
       }
     }
 
@@ -75,7 +79,6 @@
 
     input {
       flex: 1;
-          
     }
   }
 
