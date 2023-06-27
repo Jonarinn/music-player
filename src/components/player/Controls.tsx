@@ -33,7 +33,7 @@ const Controls: React.FC<ControlsProps> = ({
   elapsed,
   handleToggle,
 }) => {
-  const [progress, setProgress] = useState<number | string>(0);
+  const [progress, setProgress] = useState<number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!audioRef.current || !e.target.value) return;
@@ -41,7 +41,7 @@ const Controls: React.FC<ControlsProps> = ({
     const { value } = e.target;
     audio.currentTime = (parseFloat(value) / 1000) * duration;
     if (typeof parseFloat(value) !== "number") return;
-    setProgress(value);
+    setProgress(parseFloat(value));
   };
 
   useEffect(() => {
@@ -82,13 +82,22 @@ const Controls: React.FC<ControlsProps> = ({
 
       <div className="progress__container">
         <p>{secondsToMinutesAndSeconds(elapsed)}</p>
-        <input
-          min={0}
-          max={1000}
-          type={"range"}
-          value={progress}
-          onChange={handleChange}
-        />
+        <div>
+          <div>
+            <div
+              style={{ width: `${progress / 10}%` }}
+              className="progress"
+            ></div>
+          </div>
+          <input
+            min={0}
+            max={1000}
+            type={"range"}
+            value={progress}
+            onChange={handleChange}
+          />
+        </div>
+
         <p>{secondsToMinutesAndSeconds(duration)}</p>
       </div>
     </article>
