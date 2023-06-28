@@ -34,6 +34,8 @@ const Controls: React.FC<ControlsProps> = ({
   handleToggle,
 }) => {
   const [progress, setProgress] = useState<number>(0);
+  const [shuffle, setShuffle] = useState<boolean>(false);
+  const [repeat, setRepeat] = useState<number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!audioRef.current || !e.target.value) return;
@@ -42,6 +44,14 @@ const Controls: React.FC<ControlsProps> = ({
     audio.currentTime = (parseFloat(value) / 1000) * duration;
     if (typeof parseFloat(value) !== "number") return;
     setProgress(parseFloat(value));
+  };
+
+  const handleShuffle = () => {
+    setShuffle(!shuffle);
+  };
+
+  const handleRepeat = () => {
+    setRepeat((repeat + 1) % 3);
   };
 
   useEffect(() => {
@@ -59,7 +69,10 @@ const Controls: React.FC<ControlsProps> = ({
   return (
     <article className="controls">
       <div className="main__controls">
-        <button onClick={handleToggle} className="shuffle btn-toggle">
+        <button
+          onClick={handleShuffle}
+          className={`shuffle btn-toggle ${shuffle ? "active" : ""}`}
+        >
           <BiShuffle />
         </button>
         <button className="previous" onClick={handlePrev}>
@@ -75,7 +88,12 @@ const Controls: React.FC<ControlsProps> = ({
         <button className="next" onClick={handleNext}>
           <RxTrackNext />
         </button>
-        <button onClick={handleToggle} className="repeat btn-toggle">
+        <button
+          onClick={handleRepeat}
+          className={`repeat btn-toggle ${
+            repeat === 0 ? "" : repeat === 1 ? "active" : "active once"
+          }`}
+        >
           <BsRepeat />
         </button>
       </div>

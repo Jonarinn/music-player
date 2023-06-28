@@ -3,7 +3,7 @@ import { useLoaderData, useOutletContext } from "react-router-dom";
 import { ArtistObject, OutletContextType, TrackObject } from "../../../types";
 import "./artists.scss";
 import { AiOutlineRight } from "react-icons/ai";
-import { APIController, getSearch } from "../../data/functions";
+import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import { TokenContext } from "../../context";
 
