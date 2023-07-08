@@ -8,6 +8,17 @@ export const secondsToMinutesAndSeconds = (seconds: number) => {
   }`;
 };
 
+export const shuffleQueue = (queue: TrackObject[]) => {
+  const tempQueue = [...queue];
+  for (let i = tempQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = tempQueue[i];
+    tempQueue[i] = tempQueue[j];
+    tempQueue[j] = temp;
+  }
+  return tempQueue;
+};
+
 export const APIController = (() => {
   const clientId = "bbd938a1bcab45698b1073f3958b0320";
   const clientSecret = "012ce788aede478b889791f13bf4c4f2";

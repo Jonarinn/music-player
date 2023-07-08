@@ -156,14 +156,14 @@ export type Genre = {
 };
 
 export interface OutletContextType {
-  song: number;
+  song: TrackObject | null;
   setSong: React.Dispatch<React.SetStateAction<string>>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   playButtonRef: React.RefObject<HTMLButtonElement>;
   audioRef: React.RefObject<HTMLAudioElement>;
-  setQueue: React.Dispatch<React.SetStateAction<TrackObject[]>>;
-  queue: TrackObject[];
+  setQueue: React.Dispatch<React.SetStateAction<Queue>>;
+  queue: Queue;
   queueIndex: number;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
   search: SearchTracks;
@@ -199,3 +199,9 @@ export interface AlertType {
   type: string;
   message: string;
 }
+
+export type Queue = {
+  normal: TrackObject[];
+  shuffled: TrackObject[];
+  priority: TrackObject[];
+};

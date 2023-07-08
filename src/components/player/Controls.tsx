@@ -3,7 +3,7 @@ import "./player.scss";
 import { BsPlay, BsRepeat, BsFillPauseFill } from "react-icons/bs";
 import { BiShuffle } from "react-icons/bi";
 import { RxTrackPrevious, RxTrackNext } from "react-icons/rx";
-import { TrackObject } from "../../types";
+import { Queue } from "../../types";
 import { secondsToMinutesAndSeconds } from "../../data/functions";
 
 interface ControlsProps {
@@ -13,32 +13,32 @@ interface ControlsProps {
   playButtonRef: React.RefObject<HTMLButtonElement>;
   handleNext: () => void;
   handlePrev: () => void;
-  queue: TrackObject[];
+  queue: Queue;
   queueIndex: number;
   duration: number;
   elapsed: number;
   handleToggle: () => void;
   repeat: number;
   setRepeat: React.Dispatch<React.SetStateAction<number>>;
+  shuffle: boolean;
+  setShuffle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Controls: React.FC<ControlsProps> = ({
   audioRef,
   play,
-  setPlay,
   playButtonRef,
   handleNext,
   handlePrev,
-  queue,
-  queueIndex,
   duration,
   elapsed,
   handleToggle,
   repeat,
   setRepeat,
+  shuffle,
+  setShuffle,
 }) => {
   const [progress, setProgress] = useState<number>(0);
-  const [shuffle, setShuffle] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!audioRef.current || !e.target.value) return;
@@ -63,13 +63,6 @@ const Controls: React.FC<ControlsProps> = ({
     if (!duration) return;
     setProgress((elapsed / duration) * 1000);
   }, [elapsed, duration]);
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    const audio = audioRef.current;
-    if (play && audio.paused) audio.play();
-    else audio.pause();
-  }, [play, audioRef]);
 
   return (
     <article className="controls">
