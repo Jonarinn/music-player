@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useOutletContext } from "react-router-dom";
-import { OutletContextType } from "../../../types";
+import { OutletContextType } from "../../types";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import "./search.scss";

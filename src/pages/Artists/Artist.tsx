@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useLoaderData, useOutletContext } from "react-router-dom";
-import { ArtistObject, OutletContextType, TrackObject } from "../../../types";
+import { ArtistObject, OutletContextType, TrackObject } from "../../types";
 import "./artists.scss";
 import { AiOutlineRight } from "react-icons/ai";
 import { APIController } from "../../data/functions";

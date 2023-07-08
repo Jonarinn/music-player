@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Controls from "./Controls";
-import { TrackObject } from "../../../types";
+import { TrackObject } from "../../types";
 import { Link } from "react-router-dom";
 import { FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi";
 

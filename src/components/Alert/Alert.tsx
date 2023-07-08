@@ -1,6 +1,6 @@
 import React from "react";
 import "./alert.scss";
-import { AlertType } from "../../../types";
+import { AlertType } from "../../types";
 
 interface AlertProps {
   alert: AlertType;

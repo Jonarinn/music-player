@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageObject, TrackObject } from "../../../types";
+import { ImageObject, TrackObject } from "../../types";
 
 interface TrackThumbProps {
   track: TrackObject;

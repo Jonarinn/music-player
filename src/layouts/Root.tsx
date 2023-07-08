@@ -4,7 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
 import { APIController } from "../data/functions";
-import { AlertType, SearchTracks, TrackObject } from "../../types";
+import { AlertType, SearchTracks, TrackObject } from "../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";

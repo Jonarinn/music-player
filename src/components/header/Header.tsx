@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "./header.scss";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AlertType, SearchTracks, TrackObject } from "../../../types";
+import { AlertType, SearchTracks, TrackObject } from "../../types";
 import { signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 import { AiOutlineSearch } from "react-icons/ai";

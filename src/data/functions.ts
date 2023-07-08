@@ -1,4 +1,4 @@
-import { SearchType, TrackObject } from "../../types";
+import { SearchType, TrackObject } from "../types";
 
 export const secondsToMinutesAndSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
