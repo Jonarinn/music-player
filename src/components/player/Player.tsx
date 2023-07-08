@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import Controls from "./Controls";
 import { TrackObject } from "../../../types";
 import { Link } from "react-router-dom";
@@ -27,10 +27,11 @@ const Player: React.FC<PlayerProps> = ({
   queueIndex,
   setQueueIndex,
 }) => {
-  const [volume, setVolume] = React.useState<number>(20);
-  const [duration, setDuration] = React.useState<number>(0);
-  const [elapsed, setElapsed] = React.useState<number>(0);
-  const [mute, setMute] = React.useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(20);
+  const [duration, setDuration] = useState<number>(0);
+  const [elapsed, setElapsed] = useState<number>(0);
+  const [mute, setMute] = useState<boolean>(false);
+  const [repeat, setRepeat] = useState<number>(0);
 
   useEffect(() => {
     if (!queue) return;
@@ -39,18 +40,32 @@ const Player: React.FC<PlayerProps> = ({
 
   const handleEnded = () => {
     if (queueIndex === queue.length - 1) return;
+    if (checkRepeat()) return;
     setQueueIndex(queueIndex + 1);
   };
 
+  const checkRepeat = useCallback(() => {
+    if (repeat === 1 || repeat === 2) {
+      setQueueIndex(queueIndex);
+      audioRef.current?.play();
+      setPlay(true);
+      if (repeat === 2) {
+        setRepeat(0);
+      }
+      return true;
+    }
+    return false;
+  }, [repeat, queueIndex, setQueueIndex, audioRef]);
+
   const handleNext = () => {
     if (queueIndex === queue.length - 1) return;
+    checkRepeat();
     setQueueIndex(queueIndex + 1);
   };
 
   const handlePrev = () => {
     if (queueIndex === 0) return;
     setQueueIndex(queueIndex - 1);
-    console.log(queueIndex);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,6 +148,8 @@ const Player: React.FC<PlayerProps> = ({
         queueIndex={queueIndex}
         duration={duration}
         elapsed={elapsed}
+        repeat={repeat}
+        setRepeat={setRepeat}
       />
       <article className="volume">
         <button className="volume__btn" onClick={() => setMute(!mute)}>

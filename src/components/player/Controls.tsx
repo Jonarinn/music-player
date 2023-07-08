@@ -18,6 +18,8 @@ interface ControlsProps {
   duration: number;
   elapsed: number;
   handleToggle: () => void;
+  repeat: number;
+  setRepeat: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Controls: React.FC<ControlsProps> = ({
@@ -32,10 +34,11 @@ const Controls: React.FC<ControlsProps> = ({
   duration,
   elapsed,
   handleToggle,
+  repeat,
+  setRepeat,
 }) => {
   const [progress, setProgress] = useState<number>(0);
   const [shuffle, setShuffle] = useState<boolean>(false);
-  const [repeat, setRepeat] = useState<number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!audioRef.current || !e.target.value) return;
@@ -48,10 +51,12 @@ const Controls: React.FC<ControlsProps> = ({
 
   const handleShuffle = () => {
     setShuffle(!shuffle);
+    if (repeat !== 0) setRepeat(0);
   };
 
   const handleRepeat = () => {
     setRepeat((repeat + 1) % 3);
+    if (shuffle) setShuffle(false);
   };
 
   useEffect(() => {
@@ -91,7 +96,7 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           onClick={handleRepeat}
           className={`repeat btn-toggle ${
-            repeat === 0 ? "" : repeat === 1 ? "active" : "active once"
+            ["", "active", "active once"][repeat as 0 | 1 | 2]
           }`}
         >
           <BsRepeat />

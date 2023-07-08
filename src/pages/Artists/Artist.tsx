@@ -48,7 +48,8 @@ const Artist = () => {
     setArtistPopularity(artist.popularity);
   }, [artist.popularity]);
 
-  if (!artist || !artist.images[0] || !topTracks) return <div>loading...</div>;
+  if (!artist || !artist.images || !artist.images[0] || !topTracks)
+    return <div>loading...</div>;
 
   return (
     <div className="artist">

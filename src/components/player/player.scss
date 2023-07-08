@@ -164,12 +164,41 @@
       place-items: center;
       cursor: pointer;
 
-      transition: color 100ms ease-in-out, background-color 100ms ease-in-out,
+      transition: color 80ms ease-in-out, background-color 100ms ease-in-out,
         transform 300ms ease-in-out;
 
       &.active {
         color: var(--accent-color);
       }
+
+      &.repeat {
+        position: relative;
+
+        &.once::after {
+          font-size: 0.8rem;
+          opacity: 1;
+          pointer-events: all;
+        }
+        &::after {
+          transition: all 200ms ease-in-out;
+          content: "1";
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 15px;
+          height: 15px;
+          transform: translate(45%, 40%);
+          background-color: #33333333;
+          backdrop-filter: blur(1px);
+          color: white;
+          position: absolute;
+          border-radius: 99em;
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+
       &.play {
         position: relative;
         width: 60px;
