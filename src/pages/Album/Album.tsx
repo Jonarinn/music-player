@@ -5,7 +5,7 @@ import {
   AlbumTrackObject,
   OutletContextType,
   TrackObject,
-} from "../../../types";
+} from "../../types";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import "./album.scss";
 

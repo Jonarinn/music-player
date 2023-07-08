@@ -1,19 +1,27 @@
-import React from "react";
-import { ImageObject, TrackObject } from "../../../types";
+import React, { useEffect } from "react";
+import {
+  ImageObject,
+  OutletContextType,
+  Queue,
+  TrackObject,
+} from "../../types";
+import { shuffleQueue } from "../../data/functions";
+import { useOutletContext } from "react-router-dom";
 
 interface TrackThumbProps {
   track: TrackObject;
   i: number;
-  queue: TrackObject[];
+  queue: Queue;
   queueIndex: number;
   num?: boolean;
-  setQueue: React.Dispatch<React.SetStateAction<TrackObject[]>>;
+  setQueue: React.Dispatch<React.SetStateAction<Queue>>;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
-  setSong: React.Dispatch<React.SetStateAction<string>>;
+  setSong: React.Dispatch<React.SetStateAction<TrackObject>>;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   audioRef: React.RefObject<HTMLAudioElement>;
   tracks: TrackObject[];
   images: ImageObject[];
+  song: TrackObject | null;
 }
 
 const TrackThumb: React.FC<TrackThumbProps> = ({
@@ -30,29 +38,37 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
   tracks,
   images,
 }) => {
+  const { song } = useOutletContext() as OutletContextType;
+
   const handleSong = (
     e: React.MouseEvent<HTMLButtonElement>,
     track: TrackObject
   ) => {
-    setQueue(tracks.slice(tracks.indexOf(track), tracks.length));
+    setQueue({
+      normal: tracks.slice(tracks.indexOf(track), tracks.length),
+      shuffled: shuffleQueue(
+        tracks.slice(tracks.indexOf(track), tracks.length)
+      ),
+      priority: [],
+    });
+    setSong(track);
     setQueueIndex(0);
-    console.log(track.preview_url);
-
-    setSong(track.preview_url);
-    setPlay(true);
-    audioRef.current?.load();
+    if (!audioRef.current) return;
+    audioRef.current.play();
   };
+
+  useEffect(() => {
+    console.log(queue);
+  }, [queue]);
 
   return (
     <button
       className={`top__songs__list__item ${
-        queue[queueIndex] && track.id === queue[queueIndex].id
-          ? "listening"
-          : ""
+        song && track.id === song.id ? "listening" : ""
       }`}
       onClick={(e) => handleSong(e, track)}
     >
-      {queue[queueIndex] && track.id === queue[queueIndex].id ? (
+      {song && track.id === song.id ? (
         <div className="number">
           <div className="playing__icon ">
             <div></div>

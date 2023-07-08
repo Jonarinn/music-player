@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/header/Header";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
-import { APIController, getSearch } from "../data/functions";
-import { AlertType, SearchTracks, TrackObject } from "../../types";
+import { AlertType, Queue, SearchTracks, TrackObject } from "../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import Alert from "../components/Alert/Alert";
 
 const Root = () => {
-  const [song, setSong] = useState<string | null>(null);
+  const [song, setSong] = useState<TrackObject | null>(null);
   const [expanded, setExpanded] = useState<boolean>(true);
-  const [queue, setQueue] = useState<TrackObject[]>([]);
+  const [queue, setQueue] = useState<Queue>({
+    normal: [],
+    shuffled: [],
+    priority: [],
+  });
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const playButtonRef = React.useRef<HTMLButtonElement>(null);

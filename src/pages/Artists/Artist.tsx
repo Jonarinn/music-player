@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useLoaderData, useOutletContext } from "react-router-dom";
-import { ArtistObject, OutletContextType, TrackObject } from "../../../types";
+import { ArtistObject, OutletContextType, TrackObject } from "../../types";
 import "./artists.scss";
 import { AiOutlineRight } from "react-icons/ai";
 import { APIController } from "../../data/functions";
@@ -48,7 +48,8 @@ const Artist = () => {
     setArtistPopularity(artist.popularity);
   }, [artist.popularity]);
 
-  if (!artist || !artist.images[0] || !topTracks) return <div>loading...</div>;
+  if (!artist || !artist.images || !artist.images[0] || !topTracks)
+    return <div>loading...</div>;
 
   return (
     <div className="artist">

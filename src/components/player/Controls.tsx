@@ -3,7 +3,7 @@ import "./player.scss";
 import { BsPlay, BsRepeat, BsFillPauseFill } from "react-icons/bs";
 import { BiShuffle } from "react-icons/bi";
 import { RxTrackPrevious, RxTrackNext } from "react-icons/rx";
-import { TrackObject } from "../../../types";
+import { Queue } from "../../types";
 import { secondsToMinutesAndSeconds } from "../../data/functions";
 
 interface ControlsProps {
@@ -13,29 +13,32 @@ interface ControlsProps {
   playButtonRef: React.RefObject<HTMLButtonElement>;
   handleNext: () => void;
   handlePrev: () => void;
-  queue: TrackObject[];
+  queue: Queue;
   queueIndex: number;
   duration: number;
   elapsed: number;
   handleToggle: () => void;
+  repeat: number;
+  setRepeat: React.Dispatch<React.SetStateAction<number>>;
+  shuffle: boolean;
+  setShuffle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Controls: React.FC<ControlsProps> = ({
   audioRef,
   play,
-  setPlay,
   playButtonRef,
   handleNext,
   handlePrev,
-  queue,
-  queueIndex,
   duration,
   elapsed,
   handleToggle,
+  repeat,
+  setRepeat,
+  shuffle,
+  setShuffle,
 }) => {
   const [progress, setProgress] = useState<number>(0);
-  const [shuffle, setShuffle] = useState<boolean>(false);
-  const [repeat, setRepeat] = useState<number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!audioRef.current || !e.target.value) return;
@@ -48,23 +51,18 @@ const Controls: React.FC<ControlsProps> = ({
 
   const handleShuffle = () => {
     setShuffle(!shuffle);
+    if (repeat !== 0) setRepeat(0);
   };
 
   const handleRepeat = () => {
     setRepeat((repeat + 1) % 3);
+    if (shuffle) setShuffle(false);
   };
 
   useEffect(() => {
     if (!duration) return;
     setProgress((elapsed / duration) * 1000);
   }, [elapsed, duration]);
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    const audio = audioRef.current;
-    if (play && audio.paused) audio.play();
-    else audio.pause();
-  }, [play, audioRef]);
 
   return (
     <article className="controls">
@@ -91,7 +89,7 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           onClick={handleRepeat}
           className={`repeat btn-toggle ${
-            repeat === 0 ? "" : repeat === 1 ? "active" : "active once"
+            ["", "active", "active once"][repeat as 0 | 1 | 2]
           }`}
         >
           <BsRepeat />

@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../../firebase.config";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { OutletContextType } from "../../../../types";
+import { OutletContextType } from "../../../types";
 
 const Register = () => {
   const [email, setEmail] = React.useState("");

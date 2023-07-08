@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import Controls from "./Controls";
-import { TrackObject } from "../../../types";
+import { Queue, TrackObject } from "../../types";
 import { Link } from "react-router-dom";
 import { FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi";
 
 interface PlayerProps {
-  song: string;
-  setSong: React.Dispatch<React.SetStateAction<string | null>>;
+  song: TrackObject | null;
+  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
   audioRef: React.RefObject<HTMLAudioElement>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   playButtonRef: React.RefObject<HTMLButtonElement>;
-  queue: TrackObject[];
+  queue: Queue;
   queueIndex: number;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -27,30 +27,74 @@ const Player: React.FC<PlayerProps> = ({
   queueIndex,
   setQueueIndex,
 }) => {
-  const [volume, setVolume] = React.useState<number>(20);
-  const [duration, setDuration] = React.useState<number>(0);
-  const [elapsed, setElapsed] = React.useState<number>(0);
-  const [mute, setMute] = React.useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(20);
+  const [duration, setDuration] = useState<number>(0);
+  const [elapsed, setElapsed] = useState<number>(0);
+  const [mute, setMute] = useState<boolean>(false);
+  const [repeat, setRepeat] = useState<number>(0);
+  const [shuffle, setShuffle] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!queue) return;
-    setSong(queue[queueIndex].preview_url);
-  }, [queue, queueIndex, audioRef]);
+    console.log("useEffect Player.tsx");
+
+    if (!queue || !audioRef.current) return;
+    if (queue.priority.length > 0) {
+      setSong(queue.priority[0]);
+    } else if (shuffle) {
+      setSong(queue.shuffled[queueIndex]);
+    } else {
+      console.log("jon");
+
+      setSong(queue.normal[queueIndex]);
+    }
+  }, [queue, queueIndex, audioRef, shuffle]);
+
+  useEffect(() => {
+    console.log(song);
+  }, [song]);
 
   const handleEnded = () => {
-    if (queueIndex === queue.length - 1) return;
+    if (queueIndex === queue.normal.length - 1) return;
+    if (checkRepeat() || checkShuffle()) return;
     setQueueIndex(queueIndex + 1);
   };
 
+  const checkRepeat = useCallback(() => {
+    if (!audioRef.current) return false;
+
+    if (repeat === 1 || repeat === 2) {
+      setQueueIndex(queueIndex);
+      audioRef.current.play();
+      audioRef.current.currentTime = 0;
+      if (repeat === 2) {
+        setRepeat(0);
+      }
+      return true;
+    }
+    return false;
+  }, [repeat, queueIndex, setQueueIndex, audioRef]);
+
+  const checkShuffle = useCallback(() => {
+    if (!audioRef.current) return false;
+    if (!shuffle) return false;
+    const randomIndex = Math.floor(Math.random() * queue.normal.length);
+    setQueueIndex(randomIndex);
+    audioRef.current.play();
+    audioRef.current.currentTime = 0;
+    return true;
+  }, [shuffle, queue, queueIndex, setQueueIndex, audioRef]);
+
   const handleNext = () => {
-    if (queueIndex === queue.length - 1) return;
+    if (queueIndex === queue.normal.length - 1) return;
+    if (checkRepeat() || checkShuffle()) return;
     setQueueIndex(queueIndex + 1);
   };
 
   const handlePrev = () => {
     if (queueIndex === 0) return;
+    if (checkRepeat() || checkShuffle()) return;
+
     setQueueIndex(queueIndex - 1);
-    console.log(queueIndex);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,10 +104,10 @@ const Player: React.FC<PlayerProps> = ({
 
   const handleToggle = () => {
     if (!playButtonRef.current) return;
-    if (playButtonRef.current.classList.contains("play")) {
-      setPlay(!play);
+    if (play) {
+      audioRef.current?.pause();
     } else {
-      playButtonRef.current.classList.toggle("active");
+      audioRef.current?.play();
     }
   };
 
@@ -99,22 +143,22 @@ const Player: React.FC<PlayerProps> = ({
     };
   }, [queueIndex, queue, handleKeydown]);
 
-  if (!queue || !queue[queueIndex]) return null;
+  if (!queue || !song || !song.album.images) return null;
 
   return (
     <section className="player">
       <article>
-        <img src={queue[queueIndex].album.images[2].url} />
+        <img src={song.album.images[2].url} />
         <div>
-          <Link to={`/album/${queue[queueIndex].album.id}`}>
-            <h3>{queue[queueIndex].name}</h3>
+          <Link to={`/album/${song.album.id}`}>
+            <h3>{song.name}</h3>
           </Link>
           <div className="artists">
-            {queue[queueIndex].artists.map((artist, i) => (
+            {song.artists.map((artist, i) => (
               <Link to={`/artists/${artist.id}`} key={i}>
                 <h4>
                   {artist.name}
-                  {i === queue[queueIndex].artists.length - 1 ? "" : ","}
+                  {i === song.artists.length - 1 ? "" : ","}
                 </h4>
               </Link>
             ))}
@@ -133,6 +177,10 @@ const Player: React.FC<PlayerProps> = ({
         queueIndex={queueIndex}
         duration={duration}
         elapsed={elapsed}
+        repeat={repeat}
+        setRepeat={setRepeat}
+        shuffle={shuffle}
+        setShuffle={setShuffle}
       />
       <article className="volume">
         <button className="volume__btn" onClick={() => setMute(!mute)}>
@@ -161,7 +209,9 @@ const Player: React.FC<PlayerProps> = ({
         onLoadedData={() => audioRef.current?.play()}
         ref={audioRef}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-        src={song}
+        src={song.preview_url}
+        onPlay={() => setPlay(true)}
+        onPause={() => setPlay(false)}
       />
     </section>
   );

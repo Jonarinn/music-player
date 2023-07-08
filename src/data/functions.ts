@@ -1,4 +1,4 @@
-import { SearchType, TrackObject } from "../../types";
+import { SearchType, TrackObject } from "../types";
 
 export const secondsToMinutesAndSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -6,6 +6,17 @@ export const secondsToMinutesAndSeconds = (seconds: number) => {
   return `${minutes}:${
     secondsLeft.toString().length === 1 ? "0" + secondsLeft : secondsLeft
   }`;
+};
+
+export const shuffleQueue = (queue: TrackObject[]) => {
+  const tempQueue = [...queue];
+  for (let i = tempQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = tempQueue[i];
+    tempQueue[i] = tempQueue[j];
+    tempQueue[j] = temp;
+  }
+  return tempQueue;
 };
 
 export const APIController = (() => {
