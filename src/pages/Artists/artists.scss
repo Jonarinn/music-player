@@ -87,7 +87,8 @@
 
   .top__songs__list__item {
     display: flex;
-    padding: 0.5rem;
+    padding: 8px;
+    gap: 8px;
     align-items: center;
     height: 75px;
     width: 100%;
@@ -116,26 +117,39 @@
 
       .playing__icon {
         display: flex;
-        justify-content: space-between;
-        align-items: end;
-        gap: 0.2rem;
+        justify-content: space-evenly;
+        width: 30px;
 
         div {
-          width: 0.3rem;
-          height: 2rem;
+          width: 8px;
+          height: 32px;
           border-radius: 99em;
           background-color: var(--accent-color);
+          &:nth-of-type(2) {
+            visibility: hidden;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            transition: all 200ms ease-in-out;
+          }
         }
-        div:nth-child(1) {
-          animation: tunes 400ms infinite alternate;
-        }
-        div:nth-child(2) {
-          animation: tunes 400ms infinite alternate;
-          animation-delay: 100ms;
-        }
-        div:nth-child(3) {
-          animation: tunes 400ms infinite alternate;
-          animation-delay: 200ms;
+        &.playing {
+          div:nth-child(1) {
+            animation: tunes 400ms infinite alternate;
+          }
+          div:nth-child(2) {
+            visibility: visible;
+            width: 8px;
+            height: 32px;
+            opacity: 1;
+
+            animation: tunes 400ms infinite alternate;
+            animation-delay: 100ms;
+          }
+          div:nth-child(3) {
+            animation: tunes 400ms infinite alternate;
+            animation-delay: 200ms;
+          }
         }
       }
     }

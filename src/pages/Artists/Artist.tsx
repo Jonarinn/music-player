@@ -1,11 +1,20 @@
-import React, { useEffect, useContext } from "react";
-import { useLoaderData, useOutletContext } from "react-router-dom";
-import { ArtistObject, OutletContextType, TrackObject } from "../../types";
+import React, { useEffect, useContext, useState } from "react";
+import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
+import {
+  AlbumObject,
+  ArtistObject,
+  OutletContextType,
+  TrackObject,
+} from "../../types";
 import "./artists.scss";
 import { AiOutlineRight } from "react-icons/ai";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import { TokenContext } from "../../context";
+
+const ArtistAlbums: React.FC = () => {
+  return <div></div>;
+};
 
 const Artist = () => {
   const {
@@ -18,24 +27,47 @@ const Artist = () => {
     setQueue,
     setQueueIndex,
     queueIndex,
+    setAlert,
   }: OutletContextType = useOutletContext();
 
   const accessToken = useContext(TokenContext);
 
-  const artist = useLoaderData() as ArtistObject;
-  const [trackAmmount, setTrackAmmount] = React.useState<5 | 10>(5);
-  const [topTracks, setTopTracks] = React.useState<TrackObject[]>(
+  const artistData = useLoaderData() as ArtistObject;
+  const { artistId } = useParams();
+
+  const [artist, setArtist] = useState<ArtistObject>(artistData);
+  const [trackAmmount, setTrackAmmount] = useState<5 | 10>(5);
+  const [topTracks, setTopTracks] = useState<TrackObject[]>(
     [] as TrackObject[]
   );
+  const [albums, setAlbums] = useState<AlbumObject[]>([]);
 
-  const [artistPopularity, setArtistPopularity] = React.useState<number>(0);
+  const [songsPlayed, setSongsPlayed] = useState<number>(0);
+  const [artistPopularity, setArtistPopularity] = useState<number>(0);
 
   useEffect(() => {
-    if (!artist.name || !accessToken) return;
-    APIController.getArtistTopTracks(accessToken, artist.id).then((res) => {
-      setTopTracks(res.tracks);
-    });
-  }, [artist.name, accessToken]);
+    if (!artist.id || !accessToken) return;
+    APIController.getArtistTopTracks(accessToken, artist.id)
+      .then((res) => {
+        setTopTracks(res.tracks);
+      })
+      .catch((err) => {
+        setAlert({
+          type: "error",
+          message:
+            "An error occured while trying to get the artist's top tracks",
+        });
+      });
+  }, [artist.id, accessToken]);
+
+  useEffect(() => {
+    if (!artist.id || !accessToken) return;
+    APIController.getArtistAlbums(accessToken, artist.id, ["album"]).then(
+      (res) => {
+        console.log(res);
+      }
+    );
+  }, [artist.id, accessToken]);
 
   useEffect(() => {
     if (trackAmmount === 5)
@@ -47,6 +79,20 @@ const Artist = () => {
   useEffect(() => {
     setArtistPopularity(artist.popularity);
   }, [artist.popularity]);
+
+  useEffect(() => {
+    if (artist || !accessToken || !artistId) return;
+    APIController.getArtist(accessToken, artistId)
+      .then((res) => {
+        setArtist(res);
+      })
+      .catch((err) => {
+        setAlert({
+          type: "error",
+          message: "An error occured while trying to get the artist data",
+        });
+      });
+  }, [artist]);
 
   if (!artist || !artist.images || !artist.images[0] || !topTracks)
     return <div>loading...</div>;
@@ -100,6 +146,14 @@ const Artist = () => {
                   queueIndex={queueIndex}
                   track={track}
                   key={i}
+                  historyType={{
+                    type: "artist",
+                    id: artist.id,
+                    name: artist.name,
+                    image: artist.images[0].url,
+                  }}
+                  setSongsPlayed={setSongsPlayed}
+                  initialHistory={songsPlayed === 0}
                 />
               );
             })}
@@ -115,6 +169,7 @@ const Artist = () => {
           </button>
         </div>
       </section>
+      <ArtistAlbums />
     </div>
   );
 };

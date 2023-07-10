@@ -1,0 +1,12 @@
+.genre__thumb {
+  width: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: transform 120ms ease-in-out;
+  }
+}

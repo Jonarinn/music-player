@@ -71,7 +71,7 @@ export type TrackObject = {
   restrictions: Restrictions;
   name: string;
   popularity: number;
-  preview_url: string;
+  preview_url: string | null;
 };
 
 export type AlbumTrackObject = {
@@ -151,13 +151,13 @@ export type Genres = {
 export type Genre = {
   id: number;
   name: string;
-  picture: string;
-  type: string;
+  icons: { height: number; url: string; width: number }[];
+  href: string;
 };
 
 export interface OutletContextType {
   song: TrackObject | null;
-  setSong: React.Dispatch<React.SetStateAction<string>>;
+  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   playButtonRef: React.RefObject<HTMLButtonElement>;
@@ -205,3 +205,24 @@ export type Queue = {
   shuffled: TrackObject[];
   priority: TrackObject[];
 };
+
+export type HistoryItem = {
+  type: "track" | "album" | "artist" | "playlist";
+  id: string;
+  name: string;
+  image: string;
+};
+
+export type NotificationType = {
+  type: "success" | "error" | "info" | "warning";
+  message: string;
+  title: string;
+  image?: string;
+  read: boolean;
+};
+
+export type IncludeGroupsType =
+  | "single"
+  | "appears_on"
+  | "album"
+  | "compilation";

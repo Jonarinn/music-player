@@ -27,7 +27,11 @@ const Player: React.FC<PlayerProps> = ({
   queueIndex,
   setQueueIndex,
 }) => {
-  const [volume, setVolume] = useState<number>(20);
+  const [volume, setVolume] = useState<number>(
+    localStorage.getItem("volume")
+      ? parseFloat(localStorage.getItem("volume")!)
+      : 20
+  );
   const [duration, setDuration] = useState<number>(0);
   const [elapsed, setElapsed] = useState<number>(0);
   const [mute, setMute] = useState<boolean>(false);
@@ -35,23 +39,15 @@ const Player: React.FC<PlayerProps> = ({
   const [shuffle, setShuffle] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("useEffect Player.tsx");
-
     if (!queue || !audioRef.current) return;
     if (queue.priority.length > 0) {
       setSong(queue.priority[0]);
     } else if (shuffle) {
       setSong(queue.shuffled[queueIndex]);
     } else {
-      console.log("jon");
-
       setSong(queue.normal[queueIndex]);
     }
   }, [queue, queueIndex, audioRef, shuffle]);
-
-  useEffect(() => {
-    console.log(song);
-  }, [song]);
 
   const handleEnded = () => {
     if (queueIndex === queue.normal.length - 1) return;
@@ -125,7 +121,7 @@ const Player: React.FC<PlayerProps> = ({
           handlePrev();
           break;
         default:
-          console.log(e.key);
+          return;
       }
     },
     [playButtonRef, handleNext, handlePrev, handleToggle, play, setPlay]
@@ -143,12 +139,19 @@ const Player: React.FC<PlayerProps> = ({
     };
   }, [queueIndex, queue, handleKeydown]);
 
+  useEffect(() => {
+    if (!audioRef.current || song?.preview_url) return;
+    setQueueIndex(queueIndex + 1);
+  }, [song]);
+
   if (!queue || !song || !song.album.images) return null;
 
   return (
     <section className="player">
       <article>
-        <img src={song.album.images[2].url} />
+        <Link to={`/album/${song.album.id}`}>
+          <img src={song.album.images[2].url} />
+        </Link>
         <div>
           <Link to={`/album/${song.album.id}`}>
             <h3>{song.name}</h3>
@@ -209,9 +212,15 @@ const Player: React.FC<PlayerProps> = ({
         onLoadedData={() => audioRef.current?.play()}
         ref={audioRef}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-        src={song.preview_url}
+        src={song.preview_url ? song.preview_url : ""}
         onPlay={() => setPlay(true)}
         onPause={() => setPlay(false)}
+        onVolumeChange={(e) => {
+          localStorage.setItem(
+            "volume",
+            (e.currentTarget.volume * 250).toString()
+          );
+        }}
       />
     </section>
   );

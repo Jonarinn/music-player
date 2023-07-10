@@ -1,14 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./header.scss";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AlertType, SearchTracks, TrackObject } from "../../types";
+import {
+  AlertType,
+  NotificationType,
+  SearchTracks,
+  TrackObject,
+} from "../../types";
 import { signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 import { AiOutlineSearch } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { APIController } from "../../data/functions";
 import { TokenContext } from "../../context";
+import { BiBell, BiNotification, BiUser } from "react-icons/bi";
+import { DropdownMenu, DropdownMenuItem } from "../Dropdown";
 
 interface HeaderProps {
   searchInput: string;
@@ -25,8 +32,28 @@ const Header: React.FC<HeaderProps> = ({
   setSearchInput,
   setAlert,
 }) => {
+  const sampleNotifications: NotificationType[] = [
+    {
+      type: "info",
+      read: false,
+      message: "Jon followed you",
+      title: "New follower",
+    },
+    {
+      type: "success",
+      read: false,
+      message: "Jon liked your track",
+      title: "New like",
+    },
+  ];
+
   const location = useLocation();
   const navigate = useNavigate();
+  const [notifications, setNotifications] =
+    useState<NotificationType[]>(sampleNotifications);
+  const [newNotifications, setNewNotifications] = useState<number>(
+    notifications.map((n) => n.read).filter((n) => !n).length
+  );
 
   const accessToken = useContext(TokenContext);
 
@@ -73,6 +100,11 @@ const Header: React.FC<HeaderProps> = ({
     setSearchInput(e.target.value);
   };
 
+  const handleClear = () => {
+    setSearchInput("");
+    setSearch({} as SearchTracks);
+  };
+
   return (
     <header>
       <nav>
@@ -97,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({
             placeholder="Search"
           />
           {searchInput ? (
-            <button onClick={() => setSearchInput("")}>
+            <button onClick={handleClear}>
               <RxCross2 />
             </button>
           ) : (
@@ -108,8 +140,25 @@ const Header: React.FC<HeaderProps> = ({
 
       <nav>
         {user ? (
-          <div>
-            <button onClick={handleSignOut}>Sign Out</button>
+          <div className="header__actions">
+            <ul>
+              <li>
+                <button
+                  data-notifications={newNotifications}
+                  className={`${newNotifications === 0 ? "" : "notifications"}`}
+                >
+                  <BiBell />
+                </button>
+              </li>
+              <li>
+                <button>
+                  <DropdownMenu buttonIcon={<BiUser />}>
+                    <DropdownMenuItem>Jon</DropdownMenuItem>
+                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                  </DropdownMenu>
+                </button>
+              </li>
+            </ul>
           </div>
         ) : (
           <ul>

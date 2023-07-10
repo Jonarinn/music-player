@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import {
+  HistoryItem,
   ImageObject,
   OutletContextType,
   Queue,
   TrackObject,
 } from "../../types";
-import { shuffleQueue } from "../../data/functions";
+import { APIController, shuffleQueue } from "../../data/functions";
 import { useOutletContext } from "react-router-dom";
 
 interface TrackThumbProps {
@@ -16,29 +17,30 @@ interface TrackThumbProps {
   num?: boolean;
   setQueue: React.Dispatch<React.SetStateAction<Queue>>;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
-  setSong: React.Dispatch<React.SetStateAction<TrackObject>>;
+  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   audioRef: React.RefObject<HTMLAudioElement>;
   tracks: TrackObject[];
   images: ImageObject[];
-  song: TrackObject | null;
+  historyType: HistoryItem;
+  initialHistory?: boolean;
+  setSongsPlayed?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const TrackThumb: React.FC<TrackThumbProps> = ({
   i,
-  queue,
-  queueIndex,
   track,
   num = true,
   audioRef,
-  setPlay,
   setQueue,
   setQueueIndex,
   setSong,
   tracks,
   images,
+  historyType,
+  initialHistory = true,
 }) => {
-  const { song } = useOutletContext() as OutletContextType;
+  const { song, play } = useOutletContext() as OutletContextType;
 
   const handleSong = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -52,14 +54,21 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
       priority: [],
     });
     setSong(track);
+    console.log(track);
+
     setQueueIndex(0);
     if (!audioRef.current) return;
-    audioRef.current.play();
-  };
+    audioRef.current.load();
 
-  useEffect(() => {
-    console.log(queue);
-  }, [queue]);
+    if (!initialHistory) return;
+    APIController.setHistory(historyType)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <button
@@ -70,7 +79,7 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
     >
       {song && track.id === song.id ? (
         <div className="number">
-          <div className="playing__icon ">
+          <div className={`playing__icon ${play ? "playing" : ""}`}>
             <div></div>
             <div></div>
             <div></div>

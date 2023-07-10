@@ -1,4 +1,12 @@
-import { SearchType, TrackObject } from "../types";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase.config";
+import {
+  AlbumObject,
+  HistoryItem,
+  IncludeGroupsType,
+  SearchType,
+  TrackObject,
+} from "../types";
 
 export const secondsToMinutesAndSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -152,6 +160,33 @@ export const APIController = (() => {
     return data.items;
   };
 
+  const _getArtistAlbums = async (
+    token: string,
+    artistId: string,
+    include: IncludeGroupsType[]
+  ): Promise<AlbumObject[] | void> => {
+    const result = await fetch(
+      `https://proxy.cors.sh//https://api.spotify.com/v1/artists/${artistId}/albums${
+        include.length > 0 ? "?include_groups=" + include.join(",") : ""
+      }}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(result);
+  };
+
+  const _setHistory = async (item: HistoryItem) => {
+    if (!auth.currentUser) return;
+    const userRef = doc(db, "users", auth.currentUser.uid);
+
+    const historyObject = await getDoc(userRef);
+  };
+
   // public methods
 
   const _setAccessToken = (token: string) => {
@@ -191,6 +226,16 @@ export const APIController = (() => {
     },
     getAlbumTracks(token: string, albumId: string) {
       return _getAlbumTracks(token, albumId);
+    },
+    setHistory(item: HistoryItem) {
+      return _setHistory(item);
+    },
+    getArtistAlbums(
+      token: string,
+      artistId: string,
+      include: IncludeGroupsType[]
+    ) {
+      return _getArtistAlbums(token, artistId, include);
     },
   };
 })();
