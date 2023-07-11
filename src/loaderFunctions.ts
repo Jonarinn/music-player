@@ -7,17 +7,26 @@ const accessToken = localStorage.getItem("accessToken");
 
 export const loadArtist = async ({ params }: LoaderFunctionArgs) => {
   const { artistId } = params;
-  if (!artistId) return console.log("no artistId");
-  if (!accessToken) return console.log("no token");
-  return await APIController.getArtist(accessToken, artistId);
+  if (!artistId || !accessToken) return null;
+  try {
+    return await APIController.getArtist(accessToken, artistId);
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
 };
 
 export const loadAlbum = async ({ params }: LoaderFunctionArgs) => {
   const { albumId } = params;
-  if (!albumId) return console.log("no albumId");
-  if (!accessToken) return console.log("no token");
-  return {
-    albumInfo: await APIController.getAlbum(accessToken, albumId),
-    albumTracks: await APIController.getAlbumTracks(accessToken, albumId),
-  };
+  if (!albumId || !accessToken) return null;
+
+  try {
+    return {
+      albumInfo: await APIController.getAlbum(accessToken, albumId),
+      albumTracks: await APIController.getAlbumTracks(accessToken, albumId),
+    };
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
 };

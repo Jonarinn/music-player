@@ -7,7 +7,6 @@ import {
   TrackObject,
 } from "../../types";
 import "./artists.scss";
-import { AiOutlineRight } from "react-icons/ai";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import { TokenContext } from "../../context";
@@ -35,7 +34,7 @@ const Artist = () => {
   const artistData = useLoaderData() as ArtistObject;
   const { artistId } = useParams();
 
-  const [artist, setArtist] = useState<ArtistObject>(artistData);
+  const [artist, setArtist] = useState<ArtistObject | null>(artistData);
   const [trackAmmount, setTrackAmmount] = useState<5 | 10>(5);
   const [topTracks, setTopTracks] = useState<TrackObject[]>(
     [] as TrackObject[]
@@ -46,7 +45,7 @@ const Artist = () => {
   const [artistPopularity, setArtistPopularity] = useState<number>(0);
 
   useEffect(() => {
-    if (!artist.id || !accessToken) return;
+    if (!artist || !artist.id || !accessToken) return;
     APIController.getArtistTopTracks(accessToken, artist.id)
       .then((res) => {
         setTopTracks(res.tracks);
@@ -58,16 +57,23 @@ const Artist = () => {
             "An error occured while trying to get the artist's top tracks",
         });
       });
-  }, [artist.id, accessToken]);
+  }, [artist, accessToken]);
 
   useEffect(() => {
-    if (!artist.id || !accessToken) return;
-    APIController.getArtistAlbums(accessToken, artist.id, ["album"]).then(
-      (res) => {
-        console.log(res);
+    if (!artist || !artist.id || !accessToken) return;
+    const results = fetch(
+      "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg/albums",
+      {
+        method: "GET",
+        headers: { Authorization: "Bearer " + accessToken },
       }
-    );
-  }, [artist.id, accessToken]);
+    ).then((res) => {
+      console.log(res);
+    });
+    setTimeout(() => {
+      console.log(results);
+    }, 1000);
+  }, [artist, accessToken]);
 
   useEffect(() => {
     if (trackAmmount === 5)
@@ -77,8 +83,9 @@ const Artist = () => {
   }, [trackAmmount]);
 
   useEffect(() => {
+    if (!artist || !artist.popularity) return;
     setArtistPopularity(artist.popularity);
-  }, [artist.popularity]);
+  }, [artist]);
 
   useEffect(() => {
     if (artist || !accessToken || !artistId) return;
