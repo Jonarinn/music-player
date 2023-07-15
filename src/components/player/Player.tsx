@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Controls from "./Controls";
-import { Queue, TrackObject } from "../../types";
+import { PlayableTrackObject, Queue, TrackObject } from "../../types";
 import { Link } from "react-router-dom";
 import { FiVolume, FiVolume1, FiVolume2, FiVolumeX } from "react-icons/fi";
 
 interface PlayerProps {
-  song: TrackObject | null;
-  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
+  song: PlayableTrackObject | null;
+  setSong: React.Dispatch<React.SetStateAction<PlayableTrackObject | null>>;
   audioRef: React.RefObject<HTMLAudioElement>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -140,9 +140,15 @@ const Player: React.FC<PlayerProps> = ({
   }, [queueIndex, queue, handleKeydown]);
 
   useEffect(() => {
-    if (!audioRef.current || song?.preview_url) return;
+    if (!audioRef.current || (song && song.preview_url)) return;
+    console.log("skipped");
+
     setQueueIndex(queueIndex + 1);
   }, [song]);
+
+  useEffect(() => {
+    console.log(queue);
+  }, [queue]);
 
   if (!queue || !song || !song.album.images) return null;
 

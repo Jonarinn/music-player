@@ -3,6 +3,7 @@ import {
   HistoryItem,
   ImageObject,
   OutletContextType,
+  PlayableTrackObject,
   Queue,
   TrackObject,
 } from "../../types";
@@ -10,17 +11,18 @@ import { APIController, shuffleQueue } from "../../data/functions";
 import { useOutletContext } from "react-router-dom";
 
 interface TrackThumbProps {
-  track: TrackObject;
+  track: PlayableTrackObject;
+  type?: string;
   i: number;
   queue: Queue;
   queueIndex: number;
   num?: boolean;
   setQueue: React.Dispatch<React.SetStateAction<Queue>>;
   setQueueIndex: React.Dispatch<React.SetStateAction<number>>;
-  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
+  setSong: React.Dispatch<React.SetStateAction<PlayableTrackObject | null>>;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   audioRef: React.RefObject<HTMLAudioElement>;
-  tracks: TrackObject[];
+  tracks: PlayableTrackObject[];
   images: ImageObject[];
   historyType: HistoryItem;
   initialHistory?: boolean;
@@ -29,6 +31,7 @@ interface TrackThumbProps {
 
 const TrackThumb: React.FC<TrackThumbProps> = ({
   i,
+  type = "track",
   track,
   num = true,
   audioRef,
@@ -44,30 +47,31 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
 
   const handleSong = (
     e: React.MouseEvent<HTMLButtonElement>,
-    track: TrackObject
+    track: PlayableTrackObject
   ) => {
     setQueue({
-      normal: tracks.slice(tracks.indexOf(track), tracks.length),
+      normal:
+        type === "track"
+          ? tracks.slice(tracks.indexOf(track), tracks.length)
+          : tracks.slice(i, tracks.length),
       shuffled: shuffleQueue(
         tracks.slice(tracks.indexOf(track), tracks.length)
       ),
       priority: [],
     });
     setSong(track);
-    console.log(track);
-
     setQueueIndex(0);
     if (!audioRef.current) return;
     audioRef.current.load();
 
     if (!initialHistory) return;
-    APIController.setHistory(historyType)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // APIController.setHistory(historyType)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (

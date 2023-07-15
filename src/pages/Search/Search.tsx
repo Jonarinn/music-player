@@ -51,51 +51,53 @@ const Search: React.FC = () => {
               >
                 <div className="img__container">
                   <img
-                    src={search.artists.items[0].images[0].url}
+                    src={search.artists.items[0].images[1].url}
                     alt="Artist Cover"
                   />
                   <div>
-                    <div className="artist__name">
+                    <h3 className="artist__name">
                       {search.artists.items[0].name}
-                    </div>
+                    </h3>
                   </div>
                 </div>
               </Link>
             )}
           </article>
-          <article className="top__songs">
+          <article className="top__songs__container">
             <h2>Top Songs</h2>
-            <section className="top__songs__container">
-              {search && search.tracks ? (
-                search.tracks.items.slice(0, 5).map((track, i) => {
-                  if (!search.tracks) return <></>;
-                  return (
-                    <TrackThumb
-                      num={true}
-                      track={track}
-                      key={i}
-                      audioRef={audioRef}
-                      i={i}
-                      queue={queue}
-                      queueIndex={queueIndex}
-                      setPlay={setPlay}
-                      setQueue={setQueue}
-                      setQueueIndex={setQueueIndex}
-                      setSong={setSong}
-                      images={track.album.images}
-                      tracks={search.tracks.items}
-                      historyType={{
-                        type: "artist",
-                        id: track.id,
-                        name: track.name,
-                        image: track.album.images[0].url,
-                      }}
-                    />
-                  );
-                })
-              ) : (
-                <></>
-              )}
+            <section className="top__songs__list">
+              <div className="top__songs__list__wrapper">
+                {search && search.tracks ? (
+                  search.tracks.items.slice(0, 5).map((track, i) => {
+                    if (!search.tracks) return <></>;
+                    return (
+                      <TrackThumb
+                        num={true}
+                        track={track}
+                        key={i}
+                        audioRef={audioRef}
+                        i={i}
+                        queue={queue}
+                        queueIndex={queueIndex}
+                        setPlay={setPlay}
+                        setQueue={setQueue}
+                        setQueueIndex={setQueueIndex}
+                        setSong={setSong}
+                        images={track.album.images}
+                        tracks={search.tracks.items}
+                        historyType={{
+                          type: "artist",
+                          id: track.id,
+                          name: track.name,
+                          image: track.album.images[0].url,
+                        }}
+                      />
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </div>
             </section>
           </article>
         </section>

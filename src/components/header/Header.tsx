@@ -151,12 +151,12 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
               </li>
               <li>
-                <button>
+                <div>
                   <DropdownMenu buttonIcon={<BiUser />}>
                     <DropdownMenuItem>Jon</DropdownMenuItem>
                     <DropdownMenuItem>Settings</DropdownMenuItem>
                   </DropdownMenu>
-                </button>
+                </div>
               </li>
             </ul>
           </div>

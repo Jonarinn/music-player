@@ -2,11 +2,14 @@ import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase.config";
 import {
   AlbumObject,
+  AlbumTrackObject,
   HistoryItem,
   IncludeGroupsType,
+  PlayableTrackObject,
   SearchType,
   TrackObject,
 } from "../types";
+import axios from "axios";
 
 export const secondsToMinutesAndSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -16,7 +19,7 @@ export const secondsToMinutesAndSeconds = (seconds: number) => {
   }`;
 };
 
-export const shuffleQueue = (queue: TrackObject[]) => {
+export const shuffleQueue = (queue: PlayableTrackObject[]) => {
   const tempQueue = [...queue];
   for (let i = tempQueue.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -25,6 +28,35 @@ export const shuffleQueue = (queue: TrackObject[]) => {
     tempQueue[j] = temp;
   }
   return tempQueue;
+};
+
+export const AlbumObjectToPlayableTrackObject = (
+  track: AlbumTrackObject,
+  albumInfo: AlbumObject
+): PlayableTrackObject => {
+  return {
+    album: albumInfo,
+    artists: track.artists,
+    available_markets: track.available_markets,
+    preview_url: track.preview_url,
+    name: track.name,
+    id: track.id,
+    explicit: track.explicit,
+  };
+};
+
+export const TrackObjectToPlayableTrackObject = (
+  track: TrackObject
+): PlayableTrackObject => {
+  return {
+    album: track.album,
+    artists: track.artists,
+    available_markets: track.available_markets,
+    preview_url: track.preview_url,
+    name: track.name,
+    id: track.id,
+    explicit: track.explicit,
+  };
 };
 
 export const APIController = (() => {
@@ -165,19 +197,20 @@ export const APIController = (() => {
     artistId: string,
     include: IncludeGroupsType[]
   ): Promise<AlbumObject[] | void> => {
-    const result = await fetch(
-      `https://proxy.cors.sh//https://api.spotify.com/v1/artists/${artistId}/albums${
-        include.length > 0 ? "?include_groups=" + include.join(",") : ""
-      }}`,
+    const result = await axios.get(
+      `https://api.spotify.com/v1/artists/${artistId}/albums`,
       {
-        method: "GET",
         headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          include_groups: include,
+          limit: 4,
         },
       }
     );
-    console.log(result);
+    const data = await result.data;
+    return data.items;
   };
 
   const _setHistory = async (item: HistoryItem) => {

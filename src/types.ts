@@ -97,11 +97,21 @@ export type AlbumTrackObject = {
   };
   name: string;
   restrictions: Restrictions;
-  preview_url: string;
+  preview_url: string | null;
   track_number: number;
   type: string;
   uri: string;
   is_local: boolean;
+};
+
+export type PlayableTrackObject = {
+  album: AlbumObject;
+  artists: SimplifiedArtist[];
+  available_markets: string[];
+  preview_url: string | null;
+  name: string;
+  id: string;
+  explicit: boolean;
 };
 
 export type AlbumObject = {
@@ -156,8 +166,8 @@ export type Genre = {
 };
 
 export interface OutletContextType {
-  song: TrackObject | null;
-  setSong: React.Dispatch<React.SetStateAction<TrackObject | null>>;
+  song: PlayableTrackObject | null;
+  setSong: React.Dispatch<React.SetStateAction<PlayableTrackObject | null>>;
   play: boolean;
   setPlay: React.Dispatch<React.SetStateAction<boolean>>;
   playButtonRef: React.RefObject<HTMLButtonElement>;
@@ -201,9 +211,9 @@ export interface AlertType {
 }
 
 export type Queue = {
-  normal: TrackObject[];
-  shuffled: TrackObject[];
-  priority: TrackObject[];
+  normal: PlayableTrackObject[];
+  shuffled: PlayableTrackObject[];
+  priority: PlayableTrackObject[];
 };
 
 export type HistoryItem = {

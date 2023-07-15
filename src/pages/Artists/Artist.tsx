@@ -1,5 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
+import {
+  Link,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import {
   AlbumObject,
   ArtistObject,
@@ -10,9 +15,37 @@ import "./artists.scss";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import { TokenContext } from "../../context";
+import axios from "axios";
+import InlineLoader from "../../components/Loading/InlineLoader";
 
-const ArtistAlbums: React.FC = () => {
-  return <div></div>;
+type ArtistAlbumsProps = {
+  albums: AlbumObject[] | null;
+};
+
+const ArtistAlbums: React.FC<ArtistAlbumsProps> = ({ albums }) => {
+  if (!albums)
+    return (
+      <div>
+        <InlineLoader />
+      </div>
+    );
+  return (
+    <div className="albums">
+      <h2>Albums</h2>
+      <div className="albums__grid">
+        {albums.map((album) => (
+          <Link
+            to={`/album/${album.id}`}
+            className="albums__grid__album"
+            key={album.id}
+          >
+            <img src={album.images[1].url} alt="Album Cover" />
+            <h3>{album.name}</h3>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 const Artist = () => {
@@ -61,19 +94,16 @@ const Artist = () => {
 
   useEffect(() => {
     if (!artist || !artist.id || !accessToken) return;
-    const results = fetch(
-      "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg/albums",
-      {
-        method: "GET",
-        headers: { Authorization: "Bearer " + accessToken },
+    APIController.getArtistAlbums(accessToken, artist.id, ["album"]).then(
+      (res) => {
+        setAlbums(res);
       }
-    ).then((res) => {
-      console.log(res);
-    });
-    setTimeout(() => {
-      console.log(results);
-    }, 1000);
-  }, [artist, accessToken]);
+    );
+  }, [artist, artistId, accessToken]);
+
+  useEffect(() => {
+    console.log(albums);
+  }, [albums]);
 
   useEffect(() => {
     if (trackAmmount === 5)
@@ -176,7 +206,7 @@ const Artist = () => {
           </button>
         </div>
       </section>
-      <ArtistAlbums />
+      <ArtistAlbums albums={albums} />
     </div>
   );
 };

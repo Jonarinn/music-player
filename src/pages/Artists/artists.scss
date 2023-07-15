@@ -2,10 +2,32 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
+
+  .albums {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      gap: 20px;
+      width: 100%;
+      &__album {
+        & > img {
+          width: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
 
   section:not(:first-of-type) {
     margin-top: 20px;
@@ -77,7 +99,7 @@
   flex-direction: column;
   width: 100%;
   min-height: 30vh;
-  padding-top: 0.5rem;
+  gap: 10px;
 
   .top__songs__list {
     height: var(--top-songs-height);
@@ -164,27 +186,6 @@
         align-items: start;
         margin-left: 0.25rem;
       }
-    }
-  }
-
-  .show__button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    width: 100%;
-    background-color: var(--color-background-secondary);
-    color: var(--accent-color);
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-      background-color: var(--accent-color);
-      color: var(--color-background-secondary);
     }
   }
 }

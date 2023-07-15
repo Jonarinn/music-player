@@ -8,6 +8,7 @@ import {
 } from "../../types";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import "./album.scss";
+import { AlbumObjectToPlayableTrackObject } from "../../data/functions";
 
 const Album = () => {
   const albumData = useLoaderData() as {
@@ -33,6 +34,10 @@ const Album = () => {
 
   if (!albumInfo || !albumTracks) return <div>Loading...</div>;
 
+  useEffect(() => {
+    console.log(albumTracks);
+  }, [albumTracks]);
+
   return (
     <div className="album">
       <section className="cover">
@@ -48,6 +53,7 @@ const Album = () => {
         <div className="top__songs__list">
           {albumTracks &&
             albumTracks.map((track, i) => {
+              console.log(track, i);
               return (
                 <TrackThumb
                   audioRef={audioRef}
@@ -59,9 +65,21 @@ const Album = () => {
                   setQueueIndex={setQueueIndex}
                   setSong={setSong}
                   images={albumInfo.images}
-                  track={track}
-                  tracks={albumTracks}
-                  key={i}
+                  track={AlbumObjectToPlayableTrackObject(track, albumInfo)}
+                  tracks={albumTracks.map((albumTrack) => {
+                    return AlbumObjectToPlayableTrackObject(
+                      albumTrack,
+                      albumInfo
+                    );
+                  })}
+                  key={track.id}
+                  type="album"
+                  historyType={{
+                    type: "album",
+                    id: albumInfo.id,
+                    name: albumInfo.name,
+                    image: albumInfo.images[0].url,
+                  }}
                 />
               );
             })}

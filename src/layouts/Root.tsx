@@ -3,14 +3,20 @@ import Header from "../components/header/Header";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Player from "../components/player/Player";
-import { AlertType, Queue, SearchTracks, TrackObject } from "../types";
+import {
+  AlertType,
+  PlayableTrackObject,
+  Queue,
+  SearchTracks,
+  TrackObject,
+} from "../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import Alert from "../components/Alert/Alert";
 
 const Root = () => {
-  const [song, setSong] = useState<TrackObject | null>(null);
+  const [song, setSong] = useState<PlayableTrackObject | null>(null);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [queue, setQueue] = useState<Queue>({
     normal: [],
