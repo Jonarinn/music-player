@@ -180,12 +180,14 @@ export interface OutletContextType {
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   setAlert: React.Dispatch<React.SetStateAction<AlertType | null>>;
+  userData: userDataType;
+  setUserData: React.Dispatch<React.SetStateAction<userDataType>>;
 }
 
 export interface SearchTracks {
   search: string;
-  tracks?: TrackSearch;
-  artists?: ArtistSearch;
+  tracks: TrackSearch;
+  artists: ArtistSearch;
 }
 
 export type SearchType = "artist" | "track" | "album" | "playlist";
@@ -236,3 +238,9 @@ export type IncludeGroupsType =
   | "appears_on"
   | "album"
   | "compilation";
+
+export type userDataType = {
+  name: string;
+  history: HistoryItem[] | null;
+  notifications: NotificationType[] | null;
+};

@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "artists",
+        path: "artist",
 
         children: [
           {

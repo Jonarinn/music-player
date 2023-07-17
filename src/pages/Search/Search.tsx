@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useOutletContext } from "react-router-dom";
-import { Genre, OutletContextType } from "../../types";
+import {
+  ArtistObject,
+  ArtistSearch,
+  Genre,
+  HistoryItem,
+  OutletContextType,
+} from "../../types";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import "./search.scss";
@@ -17,6 +23,8 @@ const Search: React.FC = () => {
     setQueueIndex,
     setSong,
     search,
+    userData,
+    setUserData,
   }: OutletContextType = useOutletContext();
 
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -34,19 +42,35 @@ const Search: React.FC = () => {
     fetchGenres();
   }, [accessToken]);
 
-  useEffect(() => {
-    console.log(genres);
-  }, [genres]);
+  const handleHistory = (artist: ArtistObject) => {
+    APIController.setHistory({
+      id: artist.id,
+      image: artist.images[2].url,
+      name: artist.name,
+      type: "artist",
+    }).then((res) => {
+      console.log(res);
 
-  if (search && search.tracks) {
+      if (!res) return;
+      console.log(res);
+
+      setUserData({
+        ...userData,
+        history: res,
+      });
+    });
+  };
+
+  if (search && search.tracks && search.artists) {
     return (
       <div>
         <section className="top__search__container">
           <article className="top__artist">
             <h2>Top Artist</h2>
-            {search.artists && search.artists.items[0] && (
+            {search.artists && search.artists.items[0] ? (
               <Link
-                to={`/artists/${search.artists.items[0].id}`}
+                onClick={() => handleHistory(search.artists.items[0])}
+                to={`/artist/${search.artists.items[0].id}`}
                 className="artist__top__search"
               >
                 <div className="img__container">
@@ -61,6 +85,8 @@ const Search: React.FC = () => {
                   </div>
                 </div>
               </Link>
+            ) : (
+              <></>
             )}
           </article>
           <article className="top__songs__container">
@@ -85,8 +111,9 @@ const Search: React.FC = () => {
                         setSong={setSong}
                         images={track.album.images}
                         tracks={search.tracks.items}
+                        search={true}
                         historyType={{
-                          type: "artist",
+                          type: "track",
                           id: track.id,
                           name: track.name,
                           image: track.album.images[0].url,
@@ -116,13 +143,14 @@ const Search: React.FC = () => {
                   images={track.album.images}
                   queue={queue}
                   queueIndex={queueIndex}
+                  search={true}
                   setPlay={setPlay}
                   setQueue={setQueue}
                   setQueueIndex={setQueueIndex}
                   setSong={setSong}
                   tracks={search.tracks.items}
                   historyType={{
-                    type: "artist",
+                    type: "track",
                     id: track.id,
                     name: track.name,
                     image: track.album.images[0].url,

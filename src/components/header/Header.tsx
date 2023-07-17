@@ -14,7 +14,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { APIController } from "../../data/functions";
 import { TokenContext } from "../../context";
-import { BiBell, BiNotification, BiUser } from "react-icons/bi";
+import { BiBell, BiUser } from "react-icons/bi";
 import { DropdownMenu, DropdownMenuItem } from "../Dropdown";
 
 interface HeaderProps {

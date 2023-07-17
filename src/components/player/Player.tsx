@@ -164,7 +164,7 @@ const Player: React.FC<PlayerProps> = ({
           </Link>
           <div className="artists">
             {song.artists.map((artist, i) => (
-              <Link to={`/artists/${artist.id}`} key={i}>
+              <Link to={`/artist/${artist.id}`} key={i}>
                 <h4>
                   {artist.name}
                   {i === song.artists.length - 1 ? "" : ","}

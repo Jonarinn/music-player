@@ -8,8 +8,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
-  backdrop-filter: blur(6.5px);
-  -webkit-backdrop-filter: blur(6.5px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   background: rgba(34, 40, 34, 0.22);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
@@ -156,7 +156,29 @@
       aspect-ratio: 1;
       border-radius: 99em;
       border: 2px solid #444;
-      background-color: var(--color-background-secondary);
+
+      // &.play
+
+      &:not(.play) {
+        backdrop-filter: blur(6.5px);
+        -webkit-backdrop-filter: blur(6.5px);
+        background: rgba(34, 40, 34, 0.4);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      &.play {
+        background-color: transparent;
+        & > div {
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          background: rgba(34, 40, 34, 0.6);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          aspect-ratio: 1;
+          border-radius: 99em;
+        }
+      }
+
       color: #dde;
       font-size: 1.3rem;
       display: grid;
@@ -168,7 +190,13 @@
         transform 300ms ease-in-out;
 
       &.active {
-        color: var(--accent-color);
+        color: #dde;
+        &:hover {
+          color: white;
+        }
+        &:not(.play) {
+          color: var(--accent-color);
+        }
       }
 
       &.repeat {
@@ -189,7 +217,7 @@
           width: 15px;
           height: 15px;
           transform: translate(45%, 40%);
-          background-color: #33333333;
+          background-color: #3333;
           backdrop-filter: blur(1px);
           color: white;
           position: absolute;
@@ -232,10 +260,6 @@
           animation: spin 2s linear infinite;
           opacity: 1;
         }
-      }
-
-      &.active:hover {
-        color: var(--light-accent-color);
       }
 
       &:hover:not(.active) {

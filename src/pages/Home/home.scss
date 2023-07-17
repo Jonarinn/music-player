@@ -1,0 +1,22 @@
+.recent-search-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  .recent-search {
+    display: flex;
+    background-color: var(--background-color-secondary);
+    gap: 10px;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    & > img {
+      height: 100px;
+      aspect-ratio: 1;
+    }
+  }
+
+  @media (width < 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

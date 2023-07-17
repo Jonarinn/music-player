@@ -3,9 +3,9 @@
 :root {
   --accent-color: oklch(79.7% 0.173 214.2);
   --light-accent-color: oklch(86.18% 0.153 205.41);
-  --color-background: #222;
-  --color-background-secondary: #333;
-  --color-background-tertiary: #444;
+  --background-color: #222;
+  --background-color-secondary: #333;
+  --background-color-tertiary: #444;
   --main-padding: 200px;
   --top-songs-height: 375px;
 }
@@ -17,7 +17,7 @@
 }
 
 html {
-  background-color: var(--color-background);
+  background-color: var(--background-color);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: white;
 }

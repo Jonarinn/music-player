@@ -9,11 +9,13 @@ import {
   Queue,
   SearchTracks,
   TrackObject,
+  userDataType,
 } from "../types";
 import Sidebar from "../components/sidebar/Sidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import Alert from "../components/Alert/Alert";
+import { APIController } from "../data/functions";
 
 const Root = () => {
   const [song, setSong] = useState<PlayableTrackObject | null>(null);
@@ -32,6 +34,8 @@ const Root = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = React.useState<SearchTracks>({} as SearchTracks);
 
+  const [userData, setUserData] = useState<userDataType>({} as userDataType);
+
   useEffect(() => {
     if (expanded)
       document.documentElement.style.setProperty("--main-padding", "200px");
@@ -48,6 +52,18 @@ const Root = () => {
     });
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    APIController.getUserData()
+      .then((data) => {
+        if (!data) throw new Error("No data");
+        setUserData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [user]);
 
   return (
     <div className={`App ${song ? "song" : ""} `}>
@@ -76,6 +92,8 @@ const Root = () => {
             search: search,
             searchInput: searchInput,
             setAlert: setAlert,
+            userData: userData,
+            setUserData: setUserData,
           }}
         />
       </main>

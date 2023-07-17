@@ -9,10 +9,12 @@ import {
 } from "../../types";
 import { APIController, shuffleQueue } from "../../data/functions";
 import { useOutletContext } from "react-router-dom";
+import Search from "../../pages/Search/Search";
 
 interface TrackThumbProps {
   track: PlayableTrackObject;
   type?: string;
+  search?: boolean;
   i: number;
   queue: Queue;
   queueIndex: number;
@@ -24,7 +26,7 @@ interface TrackThumbProps {
   audioRef: React.RefObject<HTMLAudioElement>;
   tracks: PlayableTrackObject[];
   images: ImageObject[];
-  historyType: HistoryItem;
+  historyType?: HistoryItem;
   initialHistory?: boolean;
   setSongsPlayed?: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -41,6 +43,7 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
   tracks,
   images,
   historyType,
+  search = false,
   initialHistory = true,
 }) => {
   const { song, play } = useOutletContext() as OutletContextType;
@@ -64,14 +67,15 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
     if (!audioRef.current) return;
     audioRef.current.load();
 
-    if (!initialHistory) return;
-    // APIController.setHistory(historyType)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    if (!initialHistory || !search || !historyType) return;
+
+    APIController.setHistory(historyType)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

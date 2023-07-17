@@ -16,7 +16,6 @@
     translate: 0 -10px;
     transition: all 100ms ease-in-out;
     opacity: 0;
-
     display: flex;
     pointer-events: none;
     flex-direction: column;
@@ -28,20 +27,22 @@
     padding: 5px 0;
 
     &__items {
-      background-color: var(--color-background-secondary);
+      border: 2px solid var(--background-color-tertiary);
+
+      background-color: var(--background-color-secondary);
       border-radius: 6px;
       overflow: hidden;
       padding: 10px 0;
 
       .dropdown-action-button {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-color-secondary);
         color: white;
         cursor: pointer;
         display: flex;
         width: 100%;
         font-size: 1.3rem;
         &:hover {
-          background-color: var(--color-background-tertiary);
+          background-color: var(--background-color-tertiary);
         }
         border: none;
         padding: 10px 20px;

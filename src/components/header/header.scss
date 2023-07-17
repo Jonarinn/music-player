@@ -1,12 +1,12 @@
 header {
   position: sticky;
   top: 0;
-  padding: 0.5rem 0;
+  padding: 4px 4px 4px 0;
   z-index: 10;
   display: flex;
   justify-content: space-between;
-  border-bottom: 2px solid var(--color-background-secondary);
-  background-color: var(--color-background);
+  border-bottom: 2px solid var(--background-color-secondary);
+  background-color: var(--background-color);
 
   .header__actions {
     display: flex;
@@ -23,7 +23,7 @@ header {
 
           &::after {
             content: attr(data-notifications);
-            color: var(--color-background);
+            color: var(--background-color);
             font-size: 0.7rem;
             display: flex;
             align-items: center;
@@ -42,7 +42,7 @@ header {
         button:not(.dropdown-action-button) {
           height: 40px;
           width: 40px;
-          background-color: var(--color-background);
+          background-color: var(--background-color);
           border: none;
           cursor: pointer;
           border-radius: 6px;
@@ -51,7 +51,7 @@ header {
           justify-content: center;
 
           &:hover {
-            background-color: var(--color-background-secondary);
+            background-color: var(--background-color-secondary);
           }
           svg {
             color: white;
@@ -67,7 +67,7 @@ header {
     display: flex;
     gap: 10px;
     & > button {
-      background-color: var(--color-background-secondary);
+      background-color: var(--background-color-secondary);
       aspect-ratio: 1;
       display: flex;
       align-items: center;
@@ -80,7 +80,7 @@ header {
       padding: 0.5rem;
       border-radius: 6px;
       &:hover {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-color-secondary);
       }
     }
     form {
@@ -120,7 +120,7 @@ header {
       li {
         &:last-of-type a {
           background-color: white;
-          color: var(--color-background-secondary);
+          color: var(--background-color-secondary);
         }
 
         a {
@@ -131,8 +131,8 @@ header {
             border-color 150ms ease-in-out;
 
           &:hover {
-            background-color: var(--color-background-secondary);
-            border-color: var(--color-background-secondary);
+            background-color: var(--background-color-secondary);
+            border-color: var(--background-color-secondary);
             color: white;
           }
         }

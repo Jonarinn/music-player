@@ -8,6 +8,7 @@ import {
   PlayableTrackObject,
   SearchType,
   TrackObject,
+  userDataType,
 } from "../types";
 import axios from "axios";
 
@@ -213,11 +214,40 @@ export const APIController = (() => {
     return data.items;
   };
 
-  const _setHistory = async (item: HistoryItem) => {
-    if (!auth.currentUser) return;
+  const _setHistory = async (
+    item: HistoryItem
+  ): Promise<HistoryItem[] | null> => {
+    if (!auth.currentUser) return null;
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userObject = await getDoc(userRef);
+
+    if (!userObject.exists()) return null;
+
+    const historyArray = userObject.data().history as HistoryItem[];
+
+    const filteredHistory = historyArray.filter(
+      (historyItem) => historyItem.id !== item.id
+    );
+    filteredHistory.unshift(item);
+
+    await updateDoc(userRef, {
+      history: filteredHistory,
+    })
+      .then(() => {
+        return filteredHistory;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    return null;
+  };
+
+  const _getUserData = async (): Promise<userDataType | null> => {
+    if (!auth.currentUser) return null;
     const userRef = doc(db, "users", auth.currentUser.uid);
 
-    const historyObject = await getDoc(userRef);
+    const userDataObject = await getDoc(userRef);
+    return userDataObject.data() as userDataType;
   };
 
   // public methods
@@ -269,6 +299,9 @@ export const APIController = (() => {
       include: IncludeGroupsType[]
     ) {
       return _getArtistAlbums(token, artistId, include);
+    },
+    getUserData() {
+      return _getUserData();
     },
   };
 })();
