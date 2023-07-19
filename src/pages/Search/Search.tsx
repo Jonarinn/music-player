@@ -75,7 +75,11 @@ const Search: React.FC = () => {
               >
                 <div className="img__container">
                   <img
-                    src={search.artists.items[0].images[1].url}
+                    src={
+                      search.artists.items[0].images[1].url
+                        ? search.artists.items[0].images[1].url
+                        : ""
+                    }
                     alt="Artist Cover"
                   />
                   <div>

@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
@@ -13,17 +12,29 @@
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    max-width: 1200px;
 
     &__grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      display: flex;
       gap: 20px;
       width: 100%;
+      overflow: visible;
+
       &__album {
+        width: 25%;
+        &:hover {
+          cursor: pointer;
+          & > img {
+            border-radius: 16px;
+
+            box-shadow: 0 0 10px 5px var(--background-color-secondary);
+          }
+        }
         & > img {
+          aspect-ratio: 1;
           width: 100%;
           object-fit: cover;
+          transition: border-radius 250ms ease-in-out,
+            box-shadow 250ms ease-in-out;
         }
       }
     }
@@ -62,7 +73,7 @@
         }
 
         &__bar {
-          background-color: var(--color-background-secondary);
+          background-color: var(--background-color-secondary);
           height: 30px;
           border-radius: 99em;
           display: flex;
@@ -120,12 +131,12 @@
     border: none;
 
     &.listening {
-      background-color: var(--color-background-secondary);
+      background-color: var(--background-color-secondary);
       color: var(--accent-color);
     }
 
     &:hover {
-      background-color: var(--color-background-secondary);
+      background-color: var(--background-color-secondary);
       cursor: pointer;
     }
 

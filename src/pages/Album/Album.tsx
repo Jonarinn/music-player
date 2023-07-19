@@ -34,10 +34,6 @@ const Album = () => {
 
   if (!albumInfo || !albumTracks) return <div>Loading...</div>;
 
-  useEffect(() => {
-    console.log(albumTracks);
-  }, [albumTracks]);
-
   return (
     <div className="album">
       <section className="cover">
@@ -50,10 +46,9 @@ const Album = () => {
       </section>
       <section className="top__songs__container">
         <h2>Songs</h2>
-        <div className="top__songs__list">
+        <div>
           {albumTracks &&
             albumTracks.map((track, i) => {
-              console.log(track, i);
               return (
                 <TrackThumb
                   audioRef={audioRef}

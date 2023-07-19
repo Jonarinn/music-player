@@ -197,7 +197,7 @@ export const APIController = (() => {
     token: string,
     artistId: string,
     include: IncludeGroupsType[]
-  ): Promise<AlbumObject[] | void> => {
+  ): Promise<AlbumObject[]> => {
     const result = await axios.get(
       `https://api.spotify.com/v1/artists/${artistId}/albums`,
       {
@@ -205,8 +205,8 @@ export const APIController = (() => {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          include_groups: include,
-          limit: 4,
+          include_groups: include.toString(),
+          limit: 50,
         },
       }
     );
@@ -230,16 +230,16 @@ export const APIController = (() => {
     );
     filteredHistory.unshift(item);
 
-    await updateDoc(userRef, {
-      history: filteredHistory,
+    updateDoc(userRef, {
+      history: filteredHistory.slice(0, 20),
     })
       .then(() => {
-        return filteredHistory;
+        return filteredHistory.slice(0, 20);
       })
       .catch((e) => {
         console.log(e);
       });
-    return null;
+    return filteredHistory.slice(0, 20);
   };
 
   const _getUserData = async (): Promise<userDataType | null> => {

@@ -36,6 +36,10 @@ const Root = () => {
   const [userData, setUserData] = useState<userDataType>({} as userDataType);
 
   useEffect(() => {
+    console.log(userData);
+  }, [userData]);
+
+  useEffect(() => {
     if (expanded)
       document.documentElement.style.setProperty("--main-padding", "200px");
     else document.documentElement.style.setProperty("--main-padding", "50px");

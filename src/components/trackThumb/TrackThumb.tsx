@@ -46,7 +46,8 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
   search = false,
   initialHistory = true,
 }) => {
-  const { song, play } = useOutletContext() as OutletContextType;
+  const { song, play, setUserData, userData } =
+    useOutletContext() as OutletContextType;
 
   const handleSong = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -72,6 +73,9 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
     APIController.setHistory(historyType)
       .then((res) => {
         console.log(res);
+
+        if (!res) throw new Error("No data");
+        setUserData({ ...userData, history: res });
       })
       .catch((err) => {
         console.log(err);

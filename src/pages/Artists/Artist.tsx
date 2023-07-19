@@ -15,7 +15,6 @@ import "./artists.scss";
 import { APIController } from "../../data/functions";
 import TrackThumb from "../../components/trackThumb/TrackThumb";
 import { TokenContext } from "../../context";
-import axios from "axios";
 import InlineLoader from "../../components/Loading/InlineLoader";
 
 type ArtistAlbumsProps = {
@@ -31,9 +30,14 @@ const ArtistAlbums: React.FC<ArtistAlbumsProps> = ({ albums }) => {
     );
   return (
     <div className="albums">
-      <h2>Albums</h2>
+      <div className="header-with-show-button">
+        <h2>Top Tracks</h2>
+        <div>
+          <button className="show__button">Show all</button>
+        </div>
+      </div>
       <div className="albums__grid">
-        {albums.map((album) => (
+        {albums.slice(0, 4).map((album) => (
           <Link
             to={`/album/${album.id}`}
             className="albums__grid__album"
@@ -94,11 +98,16 @@ const Artist = () => {
 
   useEffect(() => {
     if (!artist || !artist.id || !accessToken) return;
-    APIController.getArtistAlbums(accessToken, artist.id, ["album"]).then(
-      (res) => {
+    APIController.getArtistAlbums(accessToken, artist.id, ["album"])
+      .then((res) => {
         setAlbums(res);
-      }
-    );
+      })
+      .catch((err) => {
+        setAlert({
+          type: "error",
+          message: "An error occured while trying to get the artist's albums",
+        });
+      });
   }, [artist, artistId, accessToken]);
 
   useEffect(() => {
@@ -165,7 +174,18 @@ const Artist = () => {
       </section>
 
       <section className="top__songs__container">
-        <h2>Top Tracks</h2>
+        <div className="header-with-show-button">
+          <h2>Top Tracks</h2>
+          <div>
+            <button
+              className="show__button"
+              onClick={() => setTrackAmmount(trackAmmount === 5 ? 10 : 5)}
+            >
+              Show {trackAmmount === 5 ? "more" : "less"}
+            </button>
+          </div>
+        </div>
+
         <div className="top__songs__list">
           <div className="top__songs__list__wrapper">
             {topTracks.map((track, i) => {
@@ -195,15 +215,6 @@ const Artist = () => {
               );
             })}
           </div>
-        </div>
-
-        <div>
-          <button
-            className="show__button"
-            onClick={() => setTrackAmmount(trackAmmount === 5 ? 10 : 5)}
-          >
-            Show {trackAmmount === 5 ? "more" : "less"}
-          </button>
         </div>
       </section>
       <ArtistAlbums albums={albums} />
