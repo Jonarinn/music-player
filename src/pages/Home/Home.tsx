@@ -15,17 +15,14 @@ const Home: React.FC = () => {
       <div>
         <section>
           <h1>Home</h1>
-        </section>
-        {userData.history && userData.history.length > 0 && (
-          <section>
-            <h2>Recent Search</h2>
+          {userData.history && userData.history.length > 0 && (
             <article className="recent-search-wrapper">
               {userData.history.slice(0, 6).map((item: HistoryItem) => {
                 return <RecentSearch key={item.id} item={item} />;
               })}
             </article>
-          </section>
-        )}
+          )}
+        </section>
       </div>
     );
   else return <></>;

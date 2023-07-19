@@ -8,7 +8,6 @@ import {
   PlayableTrackObject,
   Queue,
   SearchTracks,
-  TrackObject,
   userDataType,
 } from "../types";
 import Sidebar from "../components/sidebar/Sidebar";
