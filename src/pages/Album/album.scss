@@ -1,8 +1,8 @@
 .cover {
-    display: flex;
-    width: 100%;
-    & > img {
-        aspect-ratio: 1;
-        width: 20vw;
-    }
+  display: flex;
+  width: 100%;
+  & > img {
+    aspect-ratio: 1;
+    width: 20vw;
+  }
 }

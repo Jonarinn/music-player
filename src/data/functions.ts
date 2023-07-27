@@ -3,6 +3,7 @@ import { auth, db } from "../../firebase.config";
 import {
   AlbumObject,
   AlbumTrackObject,
+  ArtistObject,
   HistoryItem,
   IncludeGroupsType,
   PlayableTrackObject,
@@ -250,6 +251,22 @@ export const APIController = (() => {
     return userDataObject.data() as userDataType;
   };
 
+  const _getRlatedArtists = async (
+    token: string,
+    artistId: string
+  ): Promise<ArtistObject[] | null> => {
+    const result = await axios.get(
+      `https://api.spotify.com/v1/artists/${artistId}/related-artists`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = await result.data;
+    return data.artists;
+  };
+
   // public methods
 
   const _setAccessToken = (token: string) => {
@@ -302,6 +319,9 @@ export const APIController = (() => {
     },
     getUserData() {
       return _getUserData();
+    },
+    getRelatedArtists(artistId: string, token: string) {
+      return _getRlatedArtists(artistId, token);
     },
   };
 })();

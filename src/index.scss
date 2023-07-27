@@ -67,10 +67,16 @@ ul {
   }
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+}
+
 .header-with-show-button {
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-bottom: 10px;
   & > h1,
   h2,
   h3,
@@ -90,5 +96,11 @@ ul {
     &:hover {
       background-color: var(--background-color-tertiary);
     }
+  }
+}
+
+@supports (view-transition-name: album-image) {
+  .album-image {
+    view-transition-name: album-image;
   }
 }

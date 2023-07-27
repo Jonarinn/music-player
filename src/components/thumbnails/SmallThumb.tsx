@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   HistoryItem,
   ImageObject,
@@ -9,9 +9,8 @@ import {
 } from "../../types";
 import { APIController, shuffleQueue } from "../../data/functions";
 import { useOutletContext } from "react-router-dom";
-import Search from "../../pages/Search/Search";
 
-interface TrackThumbProps {
+interface SmallThumbnailProps {
   track: PlayableTrackObject;
   type?: string;
   search?: boolean;
@@ -31,7 +30,7 @@ interface TrackThumbProps {
   setSongsPlayed?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const TrackThumb: React.FC<TrackThumbProps> = ({
+const SmallThumbnail: React.FC<SmallThumbnailProps> = ({
   i,
   type = "track",
   track,
@@ -112,4 +111,4 @@ const TrackThumb: React.FC<TrackThumbProps> = ({
   );
 };
 
-export default TrackThumb;
+export default SmallThumbnail;

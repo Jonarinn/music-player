@@ -7,34 +7,85 @@
   height: 100%;
   width: 100%;
 
-  .albums {
+  .artist__bio__container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
 
-    &__grid {
-      display: flex;
-      gap: 20px;
-      width: 100%;
-      overflow: visible;
+    &__item {
+      max-width: calc(25% - 15px);
+      flex: 1;
+      position: relative;
 
-      &__album {
-        width: 25%;
+      &:hover {
+        cursor: pointer;
+
+        & img {
+          border-radius: 16px;
+          box-shadow: 0 0 10px 5px var(--background-color-secondary);
+        }
+      }
+
+      & .img__container {
+        position: relative;
+        height: fit-content;
+
         &:hover {
-          cursor: pointer;
-          & > img {
+          & .play__button__container {
+            background: linear-gradient(#0003 30%, #111f);
+            opacity: 1;
             border-radius: 16px;
-
-            box-shadow: 0 0 10px 5px var(--background-color-secondary);
+            & button {
+              transform: translateY(0);
+              opacity: 1;
+            }
           }
         }
-        & > img {
-          aspect-ratio: 1;
+
+        & img {
           width: 100%;
+          aspect-ratio: 1;
           object-fit: cover;
           transition: border-radius 250ms ease-in-out,
             box-shadow 250ms ease-in-out;
+          z-index: 0;
+        }
+
+        .play__button__container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          aspect-ratio: 1;
+          display: grid;
+          place-items: flex-end;
+          padding: 20px;
+          background: linear-gradient(#0000 70%, #000f);
+          transition: background-color 250ms ease-in-out,
+            border-radius 250ms ease-in-out, opacity 250ms ease-in-out;
+          border-radius: 0;
+          opacity: 0;
+          overflow: hidden;
+          pointer-events: none;
+
+          & button {
+            background-color: var(--accent-color);
+            display: grid;
+            place-items: center;
+            padding: 10px;
+            pointer-events: all;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 150ms ease-in-out, opacity 100ms ease-in-out;
+
+            & svg {
+              fill: white;
+              font-size: 3rem;
+            }
+          }
         }
       }
     }

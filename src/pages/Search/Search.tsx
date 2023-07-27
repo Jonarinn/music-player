@@ -8,7 +8,7 @@ import {
   OutletContextType,
 } from "../../types";
 import { APIController } from "../../data/functions";
-import TrackThumb from "../../components/trackThumb/TrackThumb";
+import { SmallThumbnail } from "../../components/thumbnails";
 import "./search.scss";
 import { TokenContext } from "../../context";
 import GenreThumb from "../../components/GenreThumb/GenreThumb";
@@ -101,7 +101,7 @@ const Search: React.FC = () => {
                   search.tracks.items.slice(0, 5).map((track, i) => {
                     if (!search.tracks) return <></>;
                     return (
-                      <TrackThumb
+                      <SmallThumbnail
                         num={true}
                         track={track}
                         key={i}
@@ -138,7 +138,7 @@ const Search: React.FC = () => {
             search.tracks.items.slice(5).map((track, i) => {
               if (!search.tracks) return <></>;
               return (
-                <TrackThumb
+                <SmallThumbnail
                   num={false}
                   track={track}
                   key={i}

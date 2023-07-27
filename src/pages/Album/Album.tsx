@@ -6,9 +6,10 @@ import {
   OutletContextType,
   TrackObject,
 } from "../../types";
-import TrackThumb from "../../components/trackThumb/TrackThumb";
+import TrackThumb from "../../components/thumbnails/SmallThumb";
 import "./album.scss";
 import { AlbumObjectToPlayableTrackObject } from "../../data/functions";
+import { FullLoader } from "../../components/Loading";
 
 const Album = () => {
   const albumData = useLoaderData() as {
@@ -32,12 +33,16 @@ const Album = () => {
     setSong,
   }: OutletContextType = useOutletContext();
 
-  if (!albumInfo || !albumTracks) return <div>Loading...</div>;
+  if (!albumInfo || !albumTracks) return <FullLoader />;
 
   return (
     <div className="album">
       <section className="cover">
-        <img src={albumInfo.images[0].url} alt={"Album cover"} />
+        <img
+          src={albumInfo.images[0].url}
+          alt={"Album cover"}
+          className="album-image"
+        />
         <div>
           <p>{albumInfo.type[0].toUpperCase() + albumInfo.type.slice(1)}</p>
           <h1>{albumInfo.name}</h1>

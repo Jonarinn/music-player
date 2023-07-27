@@ -13,8 +13,9 @@ const Home: React.FC = () => {
   if (userData)
     return (
       <div>
+        <h1>Home</h1>
         <section>
-          <h1>Home</h1>
+          <h2>Recent Searches</h2>
           {userData.history && userData.history.length > 0 && (
             <article className="recent-search-wrapper">
               {userData.history.slice(0, 6).map((item: HistoryItem) => {
@@ -22,6 +23,9 @@ const Home: React.FC = () => {
               })}
             </article>
           )}
+        </section>
+        <section>
+          <h2>Your Artists</h2>
         </section>
       </div>
     );

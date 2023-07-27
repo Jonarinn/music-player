@@ -1,12 +1,12 @@
 import React from "react";
 import Spinner from "./Spinner";
 
-const InlineLoader = () => {
+const FullLoader = () => {
   return (
-    <div className="inline-loader">
+    <div className="full-loader">
       <Spinner />
     </div>
   );
 };
 
-export default InlineLoader;
+export default FullLoader;

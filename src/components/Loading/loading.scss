@@ -1,0 +1,47 @@
+.spinner {
+  --size: 80px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--accent-color) 25%,
+    var(--background-color-secondary) 25% 100%
+  );
+  animation: spin 1.5s cubic-bezier(0.17, 0.51, 0.71, 0.32) infinite;
+  display: grid;
+  place-items: center;
+
+  & > div {
+    width: 90%;
+    background: var(--background-color);
+    aspect-ratio: 1;
+    border-radius: 99em;
+  }
+}
+
+.full-loader {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  .spinner {
+    --size: 130px;
+  }
+}
+
+.inline-loader {
+  display: inline-block;
+  .spinner {
+    --size: 40px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(720deg);
+  }
+}
